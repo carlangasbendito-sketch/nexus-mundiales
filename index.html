@@ -5,150 +5,89 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nexus - Enigmas Mundiales</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', sans-serif;
-        }
-
-        body {
-            width: 100vw;
-            height: 100vh;
-            overflow: hidden;
-            position: relative;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { width: 100vw; height: 100vh; overflow-x: hidden; position: relative; }
 
         .fondo-nexus {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(rgba(10, 15, 40, 0.65), rgba(25, 10, 50, 0.75)), 
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(10,15,40,0.7), rgba(25,10,50,0.8)), 
                         url('https://i.imgur.com/9XfQ7gL.png') center/cover no-repeat;
         }
 
         .contenedor {
-            position: relative;
-            z-index: 2;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            gap: 25px;
-            padding: 20px;
+            position: relative; z-index: 2; width: 100%; min-height: 100vh;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            gap: 20px; padding: 25px 15px;
         }
 
-        .titulo {
-            color: #ffd700;
-            font-size: 3rem;
-            font-weight: 700;
-            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
-            text-align: center;
-        }
+        .titulo { color: #ffd700; font-size: 2.6rem; font-weight: 700; text-shadow: 0 0 20px rgba(255,215,0,0.5); text-align: center; }
+        .subtitulo { color: #e0e0ff; font-size: 1.1rem; text-align: center; max-width: 500px; }
 
-        .subtitulo {
-            color: #e0e0ff;
-            font-size: 1.2rem;
-            text-align: center;
-            max-width: 550px;
-        }
-
-        /* Botones y cajas */
+        /* Botones principales */
         .boton-entrar {
-            padding: 16px 55px;
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: #0a0a2a;
-            background: linear-gradient(135deg, #ffd700, #ffaa00);
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 0 0 25px rgba(255, 215, 0, 0.6);
-            transition: all 0.3s ease;
+            padding: 15px 50px; font-size: 1.4rem; font-weight: 600; color: #0a0a2a;
+            background: linear-gradient(135deg, #ffd700, #ffaa00); border: none; border-radius: 50px;
+            cursor: pointer; box-shadow: 0 0 25px rgba(255,215,0,0.6); transition: all 0.3s ease;
         }
-        .boton-entrar:hover { transform: scale(1.08); box-shadow: 0 0 40px rgba(255,215,0,0.9); }
-
-        .caja-opciones, .caja-nick, .caja-perfil {
-            display: none;
-            flex-direction: column;
-            gap: 18px;
-            width: 100%;
-            max-width: 420px;
-            animation: aparecer 0.5s ease;
-        }
-        @keyframes aparecer {
-            from { opacity:0; transform:translateY(20px); }
-            to { opacity:1; transform:translateY(0); }
-        }
+        .boton-entrar:hover { transform: scale(1.07); box-shadow: 0 0 35px rgba(255,215,0,0.8); }
 
         .boton-invitado {
-            padding: 14px 45px;
-            font-size: 1.2rem;
-            color: #fff;
-            background: rgba(60, 80, 180, 0.8);
-            border: 2px solid #8899ff;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: 0.3s;
+            padding: 13px 45px; font-size: 1.15rem; color: #fff;
+            background: rgba(60,80,180,0.8); border: 2px solid #8899ff; border-radius: 50px;
+            cursor: pointer; transition: 0.3s;
         }
-        .boton-invitado:hover { background: rgba(80,100,200,0.9); transform: scale(1.05); }
+        .boton-invitado:hover { background: rgba(80,100,200,0.9); transform: scale(1.03); }
 
         .boton-miembro {
-            padding: 14px 45px;
-            font-size: 1.2rem;
-            color: #0a0a2a;
-            background: linear-gradient(135deg, #ffd700, #ffaa00);
-            border-radius: 50px;
-            cursor: pointer;
-            transition: 0.3s;
+            padding: 13px 45px; font-size: 1.15rem; color: #0a0a2a;
+            background: linear-gradient(135deg, #ffd700, #ffaa00); border: 2px solid #ffcc00; border-radius: 50px;
+            cursor: pointer; transition: 0.3s;
         }
-        .boton-miembro:hover { transform: scale(1.05); box-shadow: 0 0 25px rgba(255,215,0,0.7); }
+        .boton-miembro:hover { transform: scale(1.03); box-shadow: 0 0 20px rgba(255,215,0,0.7); }
 
-        .entrada-texto {
-            padding: 14px 20px;
-            font-size: 1.2rem;
-            border: 2px solid #ffd700;
-            border-radius: 12px;
-            background: rgba(10,15,40,0.8);
-            color: #fff;
-            text-align: center;
+        /* Cajas y formularios */
+        .caja {
+            display: none; flex-direction: column; gap: 15px; width: 100%; max-width: 400px;
+            background: rgba(15,10,40,0.92); padding: 25px; border-radius: 20px;
+            border: 2px solid #ffd700; animation: aparecer 0.5s ease;
         }
-        .entrada-texto::placeholder { color: #aaaacc; }
+        @keyframes aparecer { from { opacity:0; transform:translateY(15px); } to { opacity:1; transform:translateY(0); } }
 
-        .boton-aceptar {
-            padding: 12px 30px;
-            font-size: 1.1rem;
-            background: #22aa55;
-            color: white;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: 0.3s;
+        .caja h2 { color: #ffd700; text-align: center; font-size: 1.5rem; margin-bottom:5px; }
+        .etiqueta { color: #ccddff; font-size: 0.95rem; margin-top:5px; }
+        .entrada {
+            padding: 12px 15px; font-size: 1rem; border: 2px solid #4455aa; border-radius: 10px;
+            background: rgba(10,15,40,0.7); color: #fff;
         }
-        .boton-aceptar:hover { background: #33cc66; }
+        .entrada:focus { border-color: #ffd700; outline: none; }
+        .entrada::placeholder { color: #8888aa; }
 
-        .caja-perfil {
-            background: rgba(15,10,40,0.9);
-            padding: 30px;
-            border-radius: 20px;
-            border: 2px solid #ffd700;
-            text-align: center;
+        .boton-principal {
+            padding: 12px; font-size: 1.1rem; font-weight: 500; border: none; border-radius: 10px;
+            cursor: pointer; transition: 0.3s; margin-top:5px;
         }
-        .perfil-nombre { color: #ffd700; font-size: 1.8rem; font-weight: bold; margin-bottom:10px; }
-        .perfil-rol { color: #aaffaa; font-size: 1.1rem; margin-bottom:20px; }
-        .boton-avatar { background: #aa55ff; color:white; padding:12px; border-radius:10px; border:none; cursor:pointer; font-size:1rem; }
-        .boton-avatar:hover { background: #cc77ff; }
-        .boton-atras { background: #555; color:white; padding:10px; border-radius:8px; border:none; margin-top:15px; cursor:pointer; }
+        .btn-verde { background: #22aa55; color: white; }
+        .btn-verde:hover { background: #33cc66; }
+        .btn-morado { background: #9955dd; color: white; }
+        .btn-morado:hover { background: #aa66ee; }
 
-        .texto-opcion { color: #ccccff; font-size: 0.95rem; text-align: center; }
+        .texto-cambio { color: #aaccff; text-align: center; font-size: 0.9rem; margin-top:8px; }
+        .enlace { color: #ffd700; cursor: pointer; font-weight: 500; }
+        .enlace:hover { text-decoration: underline; }
 
-        @media (max-width: 500px) {
-            .titulo { font-size: 2.2rem; }
-            .boton-entrar, .boton-invitado, .boton-miembro { font-size: 1.1rem; padding:12px 35px; }
+        .boton-atras {
+            background: #444; color: white; padding: 10px; border: none; border-radius: 8px;
+            cursor: pointer; margin-top:10px; transition:0.3s;
+        }
+        .boton-atras:hover { background: #666; }
+
+        /* Perfil */
+        .perfil-nombre { color: #ffd700; font-size: 1.7rem; font-weight: bold; text-align:center; }
+        .perfil-datos { color: #ccddff; font-size: 1rem; text-align:center; margin:10px 0; }
+
+        @media (max-width: 480px) {
+            .titulo { font-size: 2rem; }
+            .caja { padding: 20px 15px; }
         }
     </style>
 </head>
@@ -156,82 +95,163 @@
     <div class="fondo-nexus"></div>
     <div class="contenedor">
 
-        <!-- Paso 1: Botón principal -->
-        <button class="boton-entrar" id="btnPrincipal" onclick="mostrarOpciones()">ENTRAR AL NEXUS</button>
+        <!-- Inicio -->
+        <button class="boton-entrar" id="btnInicio" onclick="mostrarOpciones()">ENTRAR AL NEXUS</button>
 
-        <!-- Paso 2: Elegir tipo de acceso -->
-        <div class="caja-opciones" id="cajaOpciones">
-            <h2 style="color:#ffd700; text-align:center;">Elige tu acceso</h2>
+        <!-- Elegir acceso -->
+        <div class="caja" id="cajaOpciones">
+            <h2>Elige tu forma de acceso</h2>
             <button class="boton-invitado" onclick="accesoInvitado()">🚪 Entrar como Invitado</button>
-            <p class="texto-opcion">Explora rápido sin registrarte</p>
-            <button class="boton-miembro" onclick="mostrarCajaNick()">✨ Entrar como Miembro</button>
-            <p class="texto-opcion">Crea tu perfil, avatar y guarda tu progreso</p>
+            <button class="boton-miembro" onclick="mostrarInicioSesion()">👤 Soy Miembro</button>
+            <button class="boton-miembro" onclick="mostrarRegistro()">✨ Crear cuenta nueva</button>
+            <button class="boton-atras" onclick="volverInicio()">← Volver</button>
         </div>
 
-        <!-- Paso 3: Escribir Nick (solo Miembro) -->
-        <div class="caja-nick" id="cajaNick">
-            <h2 style="color:#ffd700; text-align:center;">Escribe tu apodo</h2>
-            <input type="text" id="inputNick" class="entrada-texto" placeholder="Tu nombre en Nexus..." maxlength="15">
-            <button class="boton-aceptar" onclick="guardarNick()">Continuar</button>
+        <!-- Iniciar Sesión -->
+        <div class="caja" id="cajaLogin">
+            <h2>Iniciar Sesión</h2>
+            <label class="etiqueta">Usuario o Correo:</label>
+            <input type="text" id="loginUsuario" class="entrada" placeholder="Tu usuario o correo">
+            <label class="etiqueta">Contraseña:</label>
+            <input type="password" id="loginPass" class="entrada" placeholder="Tu contraseña">
+            <button class="boton-principal btn-verde" onclick="verificarLogin()">Ingresar</button>
+            <p class="texto-cambio">¿No tienes cuenta? <span class="enlace" onclick="mostrarRegistro()">Regístrate aquí</span></p>
             <button class="boton-atras" onclick="volverOpciones()">← Atrás</button>
         </div>
 
-        <!-- Paso 4: Perfil del Miembro -->
-        <div class="caja-perfil" id="cajaPerfil">
+        <!-- Formulario Registro Completo -->
+        <div class="caja" id="cajaRegistro">
+            <h2>Crear tu Perfil de Miembro</h2>
+            
+            <label class="etiqueta">Nombre de Usuario *</label>
+            <input type="text" id="regUsuario" class="entrada" placeholder="Tu nombre público" maxlength="15" required>
+            
+            <label class="etiqueta">Contraseña *</label>
+            <input type="password" id="regPass" class="entrada" placeholder="Mínimo 6 caracteres" required>
+            
+            <label class="etiqueta">Correo Electrónico *</label>
+            <input type="email" id="regCorreo" class="entrada" placeholder="tucorreo@ejemplo.com" required>
+            
+            <label class="etiqueta">Nacionalidad *</label>
+            <input type="text" id="regNacion" class="entrada" placeholder="Ej: México, Argentina, España..." required>
+
+            <button class="boton-principal btn-verde" onclick="guardarRegistro()">Finalizar Registro</button>
+            <p class="texto-cambio">¿Ya tienes cuenta? <span class="enlace" onclick="mostrarInicioSesion()">Inicia sesión</span></p>
+            <button class="boton-atras" onclick="volverOpciones()">← Atrás</button>
+        </div>
+
+        <!-- Perfil del Miembro -->
+        <div class="caja" id="cajaPerfil">
             <div class="perfil-nombre" id="nombrePerfil"></div>
-            <div class="perfil-rol">🌟 Miembro de Nexus</div>
-            <p style="color:#ddd; margin-bottom:15px;">Ahora puedes crear tu avatar personalizado:</p>
-            <button class="boton-avatar" onclick="irAvatar()">🎨 Crear mi Avatar</button>
-            <button class="boton-atras" onclick="volverInicio()">← Volver al inicio</button>
+            <div class="perfil-datos">
+                <p>📧 Correo: <span id="correoPerfil"></span></p>
+                <p>🌎 Nacionalidad: <span id="nacionPerfil"></span></p>
+                <p>🌟 Tipo: Miembro de Nexus</p>
+            </div>
+            <button class="boton-principal btn-morado" onclick="abrirCreadorAvatar()">🎨 Crear mi Avatar</button>
+            <button class="boton-principal btn-verde" onclick="irSalaSaberes()">📚 Ir a la Sala de Saberes</button>
+            <button class="boton-atras" onclick="cerrarSesion()">Cerrar Sesión</button>
         </div>
 
     </div>
 
     <script>
+        // --- Navegación básica ---
         function mostrarOpciones() {
-            document.getElementById('btnPrincipal').style.display = 'none';
+            document.getElementById('btnInicio').style.display = 'none';
             document.getElementById('cajaOpciones').style.display = 'flex';
         }
+        function volverInicio() {
+            ocultarTodasCajas();
+            document.getElementById('btnInicio').style.display = 'block';
+        }
+        function volverOpciones() {
+            ocultarTodasCajas();
+            document.getElementById('cajaOpciones').style.display = 'flex';
+        }
+        function ocultarTodasCajas() {
+            document.querySelectorAll('.caja').forEach(caja => caja.style.display = 'none');
+        }
 
+        // --- Invitado ---
         function accesoInvitado() {
-            alert("👋 Bienvenido Invitado! Accediendo a la Sala de Saberes...\nTu nombre temporal será: Invitado_" + Math.floor(Math.random()*999));
-            // Aquí enlazamos a la sala después
+            const nombreTemp = "Invitado_" + Math.floor(Math.random()*9999);
+            alert(`👋 Bienvenido ${nombreTemp}! Accediendo a la Sala de Saberes...`);
+            localStorage.setItem('nexus_tipo', 'invitado');
+            localStorage.setItem('nexus_nick', nombreTemp);
         }
 
-        function mostrarCajaNick() {
-            document.getElementById('cajaOpciones').style.display = 'none';
-            document.getElementById('cajaNick').style.display = 'flex';
+        // --- Sesión y Registro ---
+        function mostrarInicioSesion() {
+            ocultarTodasCajas();
+            document.getElementById('cajaLogin').style.display = 'flex';
+        }
+        function mostrarRegistro() {
+            ocultarTodasCajas();
+            document.getElementById('cajaRegistro').style.display = 'flex';
         }
 
-        function guardarNick() {
-            const nick = document.getElementById('inputNick').value.trim();
-            if(nick.length < 2) {
-                alert("Por favor escribe un apodo de al menos 2 letras");
-                return;
+        function guardarRegistro() {
+            const usuario = document.getElementById('regUsuario').value.trim();
+            const pass = document.getElementById('regPass').value.trim();
+            const correo = document.getElementById('regCorreo').value.trim();
+            const nacion = document.getElementById('regNacion').value.trim();
+
+            // Validaciones sencillas
+            if(usuario.length < 2) return alert("El usuario debe tener al menos 2 caracteres");
+            if(pass.length < 6) return alert("La contraseña debe tener al menos 6 caracteres");
+            if(!correo.includes('@')) return alert("Escribe un correo válido");
+            if(nacion.length < 2) return alert("Escribe tu nacionalidad");
+
+            // Guardamos los datos del perfil
+            localStorage.setItem('nexus_tipo', 'miembro');
+            localStorage.setItem('nexus_nick', usuario);
+            localStorage.setItem('nexus_pass', pass);
+            localStorage.setItem('nexus_correo', correo);
+            localStorage.setItem('nexus_nacion', nacion);
+
+            alert("✅ Perfil creado correctamente! Bienvenido a Nexus " + usuario);
+            mostrarPerfil();
+        }
+
+        function verificarLogin() {
+            const ingreso = document.getElementById('loginUsuario').value.trim();
+            const passIngreso = document.getElementById('loginPass').value.trim();
+
+            const usuarioGuardado = localStorage.getItem('nexus_nick');
+            const correoGuardado = localStorage.getItem('nexus_correo');
+            const passGuardada = localStorage.getItem('nexus_pass');
+
+            if((ingreso === usuarioGuardado || ingreso === correoGuardado) && passIngreso === passGuardada) {
+                alert("✅ Bienvenido de nuevo " + usuarioGuardado + "!");
+                mostrarPerfil();
+            } else {
+                alert("❌ Datos incorrectos o no existe la cuenta. Regístrate primero.");
             }
-            // Guardamos el nombre para usarlo en todo el proyecto
-            localStorage.setItem('nexus_nick', nick);
-            
-            // Mostramos el perfil
-            document.getElementById('cajaNick').style.display = 'none';
-            document.getElementById('nombrePerfil').textContent = nick;
+        }
+
+        function mostrarPerfil() {
+            ocultarTodasCajas();
+            document.getElementById('nombrePerfil').textContent = localStorage.getItem('nexus_nick');
+            document.getElementById('correoPerfil').textContent = localStorage.getItem('nexus_correo');
+            document.getElementById('nacionPerfil').textContent = localStorage.getItem('nexus_nacion');
             document.getElementById('cajaPerfil').style.display = 'flex';
         }
 
-        function irAvatar() {
-            alert("Vamos a abrir la herramienta gratuita para crear tu avatar ✨");
-            // Aquí enlazaremos Ready Player Me después
+        function cerrarSesion() {
+            if(confirm("¿Seguro que quieres cerrar sesión?")) {
+                localStorage.removeItem('nexus_tipo');
+                volverInicio();
+            }
         }
 
-        function volverOpciones() {
-            document.getElementById('cajaNick').style.display = 'none';
-            document.getElementById('cajaOpciones').style.display = 'flex';
+        // --- Avatar y Sala ---
+        function abrirCreadorAvatar() {
+            window.open("https://vr.readyplayer.me/avatar?lang=es", 'CreadorAvatar', 'width=900,height=700');
+            alert("Guarda tu avatar y regresa aquí para continuar ✨");
         }
-
-        function volverInicio() {
-            document.getElementById('cajaPerfil').style.display = 'none';
-            document.getElementById('btnPrincipal').style.display = 'block';
-            localStorage.removeItem('nexus_nick');
+        function irSalaSaberes() {
+            alert(`📚 Accediendo a la Sala de Saberes... Bienvenido/a ${localStorage.getItem('nexus_nick')}!`);
         }
     </script>
 </body>
