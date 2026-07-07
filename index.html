@@ -21,9 +21,7 @@
         }
 
         .titulo { color: #ffd700; font-size: 2.6rem; font-weight: 700; text-shadow: 0 0 20px rgba(255,215,0,0.5); text-align: center; }
-        .subtitulo { color: #e0e0ff; font-size: 1.1rem; text-align: center; max-width: 500px; }
 
-        /* Botones principales */
         .boton-entrar {
             padding: 15px 50px; font-size: 1.4rem; font-weight: 600; color: #0a0a2a;
             background: linear-gradient(135deg, #ffd700, #ffaa00); border: none; border-radius: 50px;
@@ -45,9 +43,8 @@
         }
         .boton-miembro:hover { transform: scale(1.03); box-shadow: 0 0 20px rgba(255,215,0,0.7); }
 
-        /* Cajas y formularios */
         .caja {
-            display: none; flex-direction: column; gap: 15px; width: 100%; max-width: 400px;
+            display: none; flex-direction: column; gap: 15px; width: 100%; max-width: 420px;
             background: rgba(15,10,40,0.92); padding: 25px; border-radius: 20px;
             border: 2px solid #ffd700; animation: aparecer 0.5s ease;
         }
@@ -70,6 +67,10 @@
         .btn-verde:hover { background: #33cc66; }
         .btn-morado { background: #9955dd; color: white; }
         .btn-morado:hover { background: #aa66ee; }
+        .btn-naranja { background: #ff8822; color: white; }
+        .btn-naranja:hover { background: #ff9944; }
+        .btn-rojo { background: #cc3333; color: white; font-size:0.9rem; padding:8px; }
+        .btn-rojo:hover { background: #ee4444; }
 
         .texto-cambio { color: #aaccff; text-align: center; font-size: 0.9rem; margin-top:8px; }
         .enlace { color: #ffd700; cursor: pointer; font-weight: 500; }
@@ -81,6 +82,28 @@
         }
         .boton-atras:hover { background: #666; }
 
+        /* Creador y lista de Avatares */
+        .caja-avatar { max-width: 95%; }
+        .marco-avatar {
+            width: 100%; height: 400px; border: 2px solid #ffd700; border-radius: 12px;
+            background: #000; margin: 10px 0;
+        }
+        .aviso-avatar { color: #aaffaa; text-align: center; font-size: 0.9rem; }
+        .contador-avatares { color: #ffd700; text-align:center; font-weight:bold; margin:5px 0; }
+
+        .lista-avatares {
+            display: grid; grid-template-columns: repeat(2, 1fr); gap:10px; margin:10px 0;
+            max-height:200px; overflow-y:auto; padding:5px;
+        }
+        .tarjeta-avatar {
+            background: rgba(30,20,60,0.8); border:2px solid #556; border-radius:10px;
+            padding:10px; text-align:center; cursor:pointer; transition:0.3s;
+        }
+        .tarjeta-avatar.activo { border-color:#ffd700; box-shadow:0 0 10px rgba(255,215,0,0.5); }
+        .tarjeta-avatar:hover { border-color:#8899ff; }
+        .icono-avatar { font-size:2rem; margin-bottom:5px; }
+        .nombre-avatar { color:#fff; font-size:0.9rem; }
+
         /* Perfil */
         .perfil-nombre { color: #ffd700; font-size: 1.7rem; font-weight: bold; text-align:center; }
         .perfil-datos { color: #ccddff; font-size: 1rem; text-align:center; margin:10px 0; }
@@ -88,6 +111,8 @@
         @media (max-width: 480px) {
             .titulo { font-size: 2rem; }
             .caja { padding: 20px 15px; }
+            .lista-avatares { grid-template-columns: 1fr; }
+            .marco-avatar { height: 350px; }
         }
     </style>
 </head>
@@ -102,8 +127,10 @@
         <div class="caja" id="cajaOpciones">
             <h2>Elige tu forma de acceso</h2>
             <button class="boton-invitado" onclick="accesoInvitado()">🚪 Entrar como Invitado</button>
+            <p class="texto-cambio">Explora rápido, sin registros ni avatar</p>
             <button class="boton-miembro" onclick="mostrarInicioSesion()">👤 Soy Miembro</button>
-            <button class="boton-miembro" onclick="mostrarRegistro()">✨ Crear cuenta nueva</button>
+            <button class="boton-miembro" onclick="mostrarRegistro()">✨ Crear cuenta de Miembro</button>
+            <p class="texto-cambio">Hasta 10 avatares guardados en tu perfil</p>
             <button class="boton-atras" onclick="volverInicio()">← Volver</button>
         </div>
 
@@ -119,47 +146,51 @@
             <button class="boton-atras" onclick="volverOpciones()">← Atrás</button>
         </div>
 
-        <!-- Formulario Registro Completo -->
+        <!-- Formulario Registro -->
         <div class="caja" id="cajaRegistro">
             <h2>Crear tu Perfil de Miembro</h2>
-            
             <label class="etiqueta">Nombre de Usuario *</label>
             <input type="text" id="regUsuario" class="entrada" placeholder="Tu nombre público" maxlength="15" required>
-            
             <label class="etiqueta">Contraseña *</label>
             <input type="password" id="regPass" class="entrada" placeholder="Mínimo 6 caracteres" required>
-            
             <label class="etiqueta">Correo Electrónico *</label>
             <input type="email" id="regCorreo" class="entrada" placeholder="tucorreo@ejemplo.com" required>
-            
             <label class="etiqueta">Nacionalidad *</label>
-            <input type="text" id="regNacion" class="entrada" placeholder="Ej: México, Argentina, España..." required>
-
-            <button class="boton-principal btn-verde" onclick="guardarRegistro()">Finalizar Registro</button>
+            <input type="text" id="regNacion" class="entrada" placeholder="Ej: México, Argentina..." required>
+            <button class="boton-principal btn-verde" onclick="guardarRegistro()">Continuar → Crear Avatar</button>
             <p class="texto-cambio">¿Ya tienes cuenta? <span class="enlace" onclick="mostrarInicioSesion()">Inicia sesión</span></p>
             <button class="boton-atras" onclick="volverOpciones()">← Atrás</button>
         </div>
 
-        <!-- Perfil del Miembro -->
+        <!-- Creador de Avatar (nuevo registro) -->
+        <div class="caja caja-avatar" id="cajaCreadorAvatar">
+            <h2>🎨 Crea tu primer Avatar</h2>
+            <p class="aviso-avatar">Puedes guardar hasta 10 avatares distintos en tu perfil</p>
+            <iframe src="https://vr.readyplayer.me/avatar?lang=es&frame=1" class="marco-avatar" allow="camera; microphone; xr-spatial-tracking"></iframe>
+            <button class="boton-principal btn-verde" onclick="agregarAvatar()">✅ Guardar y continuar</button>
+        </div>
+
+        <!-- Perfil y Gestión de Avatares -->
         <div class="caja" id="cajaPerfil">
             <div class="perfil-nombre" id="nombrePerfil"></div>
             <div class="perfil-datos">
                 <p>📧 Correo: <span id="correoPerfil"></span></p>
                 <p>🌎 Nacionalidad: <span id="nacionPerfil"></span></p>
-                <p>🌟 Tipo: Miembro de Nexus</p>
             </div>
-            <button class="boton-principal btn-morado" onclick="abrirCreadorAvatar()">🎨 Crear mi Avatar</button>
-            <button class="boton-principal btn-verde" onclick="irSalaSaberes()">📚 Ir a la Sala de Saberes</button>
+            <div class="contador-avatares" id="contadorAvatares"></div>
+            <div class="lista-avatares" id="listaAvatares"></div>
+            <button class="boton-principal btn-morado" onclick="agregarNuevoAvatar()">➕ Crear nuevo Avatar</button>
+            <button class="boton-principal btn-naranja" onclick="irSalaSaberes()">📚 Ir a la Sala de Saberes</button>
             <button class="boton-atras" onclick="cerrarSesion()">Cerrar Sesión</button>
         </div>
 
     </div>
 
     <script>
-        // --- Navegación básica ---
-        function mostrarOpciones() {
-            document.getElementById('btnInicio').style.display = 'none';
-            document.getElementById('cajaOpciones').style.display = 'flex';
+        const MAX_AVATARES = 10;
+
+        function ocultarTodasCajas() {
+            document.querySelectorAll('.caja').forEach(caja => caja.style.display = 'none');
         }
         function volverInicio() {
             ocultarTodasCajas();
@@ -169,27 +200,18 @@
             ocultarTodasCajas();
             document.getElementById('cajaOpciones').style.display = 'flex';
         }
-        function ocultarTodasCajas() {
-            document.querySelectorAll('.caja').forEach(caja => caja.style.display = 'none');
-        }
 
-        // --- Invitado ---
+        // Invitado
         function accesoInvitado() {
             const nombreTemp = "Invitado_" + Math.floor(Math.random()*9999);
-            alert(`👋 Bienvenido ${nombreTemp}! Accediendo a la Sala de Saberes...`);
+            alert(`👋 Bienvenido ${nombreTemp}! Entrando a la Sala...`);
             localStorage.setItem('nexus_tipo', 'invitado');
             localStorage.setItem('nexus_nick', nombreTemp);
+            window.location.href = "sala.html";
         }
 
-        // --- Sesión y Registro ---
-        function mostrarInicioSesion() {
-            ocultarTodasCajas();
-            document.getElementById('cajaLogin').style.display = 'flex';
-        }
-        function mostrarRegistro() {
-            ocultarTodasCajas();
-            document.getElementById('cajaRegistro').style.display = 'flex';
-        }
+        function mostrarInicioSesion() { ocultarTodasCajas(); document.getElementById('cajaLogin').style.display = 'flex'; }
+        function mostrarRegistro() { ocultarTodasCajas(); document.getElementById('cajaRegistro').style.display = 'flex'; }
 
         function guardarRegistro() {
             const usuario = document.getElementById('regUsuario').value.trim();
@@ -197,37 +219,93 @@
             const correo = document.getElementById('regCorreo').value.trim();
             const nacion = document.getElementById('regNacion').value.trim();
 
-            // Validaciones sencillas
-            if(usuario.length < 2) return alert("El usuario debe tener al menos 2 caracteres");
-            if(pass.length < 6) return alert("La contraseña debe tener al menos 6 caracteres");
-            if(!correo.includes('@')) return alert("Escribe un correo válido");
-            if(nacion.length < 2) return alert("Escribe tu nacionalidad");
+            if(usuario.length <2) return alert("Usuario de al menos 2 caracteres");
+            if(pass.length <6) return alert("Contraseña de al menos 6 caracteres");
+            if(!correo.includes('@')) return alert("Correo inválido");
+            if(nacion.length <2) return alert("Escribe tu nacionalidad");
 
-            // Guardamos los datos del perfil
             localStorage.setItem('nexus_tipo', 'miembro');
             localStorage.setItem('nexus_nick', usuario);
             localStorage.setItem('nexus_pass', pass);
             localStorage.setItem('nexus_correo', correo);
             localStorage.setItem('nexus_nacion', nacion);
+            localStorage.setItem('nexus_lista_avatares', JSON.stringify([]));
 
-            alert("✅ Perfil creado correctamente! Bienvenido a Nexus " + usuario);
-            mostrarPerfil();
+            alert("✅ Datos guardados! Crea tu primer avatar");
+            ocultarTodasCajas();
+            document.getElementById('cajaCreadorAvatar').style.display = 'flex';
         }
 
         function verificarLogin() {
             const ingreso = document.getElementById('loginUsuario').value.trim();
             const passIngreso = document.getElementById('loginPass').value.trim();
+            const u = localStorage.getItem('nexus_nick');
+            const c = localStorage.getItem('nexus_correo');
+            const p = localStorage.getItem('nexus_pass');
 
-            const usuarioGuardado = localStorage.getItem('nexus_nick');
-            const correoGuardado = localStorage.getItem('nexus_correo');
-            const passGuardada = localStorage.getItem('nexus_pass');
-
-            if((ingreso === usuarioGuardado || ingreso === correoGuardado) && passIngreso === passGuardada) {
-                alert("✅ Bienvenido de nuevo " + usuarioGuardado + "!");
+            if((ingreso===u || ingreso===c) && passIngreso===p) {
+                alert("✅ Bienvenido de nuevo " + u);
                 mostrarPerfil();
-            } else {
-                alert("❌ Datos incorrectos o no existe la cuenta. Regístrate primero.");
-            }
+            } else alert("❌ Datos incorrectos");
+        }
+
+        // Gestión de Avatares
+        function agregarAvatar() {
+            let avatares = JSON.parse(localStorage.getItem('nexus_lista_avatares') || '[]');
+            if(avatares.length >= MAX_AVATARES) return alert(`⚠️ Ya tienes ${MAX_AVATARES} avatares, elimina uno antes`);
+            
+            const nuevo = { id: Date.now(), nombre: `Avatar ${avatares.length+1}`, activo: avatares.length===0 };
+            avatares.push(nuevo);
+            localStorage.setItem('nexus_lista_avatares', JSON.stringify(avatares));
+            
+            alert("✅ Avatar guardado correctamente!");
+            mostrarPerfil();
+        }
+
+        function agregarNuevoAvatar() {
+            let avatares = JSON.parse(localStorage.getItem('nexus_lista_avatares') || '[]');
+            if(avatares.length >= MAX_AVATARES) return alert(`⚠️ Límite de ${MAX_AVATARES} avatares alcanzado`);
+            ocultarTodasCajas();
+            document.getElementById('cajaCreadorAvatar').style.display = 'flex';
+        }
+
+        function seleccionarAvatar(id) {
+            let avatares = JSON.parse(localStorage.getItem('nexus_lista_avatares'));
+            avatares.forEach(a => a.activo = (a.id === id));
+            localStorage.setItem('nexus_lista_avatares', JSON.stringify(avatares));
+            cargarListaAvatares();
+            alert("✅ Avatar activo cambiado");
+        }
+
+        function eliminarAvatar(id) {
+            if(!confirm("¿Eliminar este avatar? No se puede recuperar")) return;
+            let avatares = JSON.parse(localStorage.getItem('nexus_lista_avatares'));
+            const activos = avatares.filter(a => a.activo).length;
+            const eliminarActivo = avatares.find(a => a.id === id)?.activo;
+            if(eliminarActivo && avatares.length>1) return alert("⚠️ No puedes eliminar el avatar activo, selecciona otro primero");
+            
+            avatares = avatares.filter(a => a.id !== id);
+            localStorage.setItem('nexus_lista_avatares', JSON.stringify(avatares));
+            cargarListaAvatares();
+        }
+
+        function cargarListaAvatares() {
+            const avatares = JSON.parse(localStorage.getItem('nexus_lista_avatares') || '[]');
+            document.getElementById('contadorAvatares').textContent = `📦 Avatares: ${avatares.length}/${MAX_AVATARES}`;
+            const lista = document.getElementById('listaAvatares');
+            lista.innerHTML = '';
+            
+            avatares.forEach(a => {
+                const tarjeta = document.createElement('div');
+                tarjeta.className = `tarjeta-avatar ${a.activo ? 'activo' : ''}`;
+                tarjeta.innerHTML = `
+                    <div class="icono-avatar">👤</div>
+                    <div class="nombre-avatar">${a.nombre} ${a.activo ? '⭐' : ''}</div>
+                    <button class="boton-principal btn-verde" style="font-size:0.8rem; padding:5px; margin:5px 0;" onclick="seleccionarAvatar(${a.id})">Usar</button>
+                    <button class="btn-rojo" onclick="eliminarAvatar(${a.id})">Eliminar</button>
+                `;
+                lista.appendChild(tarjeta);
+            });
         }
 
         function mostrarPerfil() {
@@ -235,24 +313,14 @@
             document.getElementById('nombrePerfil').textContent = localStorage.getItem('nexus_nick');
             document.getElementById('correoPerfil').textContent = localStorage.getItem('nexus_correo');
             document.getElementById('nacionPerfil').textContent = localStorage.getItem('nexus_nacion');
+            cargarListaAvatares();
             document.getElementById('cajaPerfil').style.display = 'flex';
         }
 
         function cerrarSesion() {
-            if(confirm("¿Seguro que quieres cerrar sesión?")) {
-                localStorage.removeItem('nexus_tipo');
-                volverInicio();
-            }
+            if(confirm("¿Cerrar sesión?")) { localStorage.clear(); volverInicio(); }
         }
-
-        // --- Avatar y Sala ---
-        function abrirCreadorAvatar() {
-            window.open("https://vr.readyplayer.me/avatar?lang=es", 'CreadorAvatar', 'width=900,height=700');
-            alert("Guarda tu avatar y regresa aquí para continuar ✨");
-        }
-        function irSalaSaberes() {
-            alert(`📚 Accediendo a la Sala de Saberes... Bienvenido/a ${localStorage.getItem('nexus_nick')}!`);
-        }
+        function irSalaSaberes() { window.location.href = "sala.html"; }
     </script>
 </body>
 </html>
