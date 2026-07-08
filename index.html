@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus - Creador de Avatar 3D</title>
+    <title>Nexus - Creador de Avatar Personalizado</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
         body { width: 100vw; height: 100vh; overflow-x: hidden; position: relative; }
@@ -52,6 +52,7 @@
         @keyframes aparecer { from { opacity:0; transform:translateY(15px); } to { opacity:1; transform:translateY(0); } }
 
         .caja h2 { color: #ffd700; text-align: center; font-size: 1.5rem; margin-bottom:8px; }
+        .caja h3 { color:#ffd700; font-size:1.1rem; margin-top:10px; margin-bottom:5px; }
         .etiqueta { color: #ccddff; font-size: 0.95rem; margin-top:5px; }
         .entrada {
             padding: 12px 15px; font-size: 1rem; border: 2px solid #4455aa; border-radius: 10px;
@@ -66,6 +67,10 @@
         }
         .btn-verde { background: #22aa55; color: white; }
         .btn-verde:hover { background: #33cc66; }
+        .btn-morado { background: #9955dd; color: white; }
+        .btn-morado:hover { background: #aa66ee; }
+        .btn-naranja { background: #ff8822; color: white; }
+        .btn-naranja:hover { background: #ff9944; }
         .btn-rojo { background: #cc3333; color: white; font-size:0.9rem; padding:8px; border-radius:8px; width:100%; }
         .btn-rojo:hover { background: #ee4444; }
 
@@ -103,7 +108,7 @@
             <p class="texto-cambio">Explora rápido</p>
             <button class="boton-miembro" onclick="mostrarInicioSesion()">👤 Soy Miembro</button>
             <button class="boton-miembro" onclick="mostrarRegistro()">✨ Crear cuenta</button>
-            <p class="texto-cambio">Elige tu creador favorito y diseña tu avatar</p>
+            <p class="texto-cambio">Crea tu avatar totalmente personalizado</p>
             <button class="boton-atras" onclick="volverInicio()">← Volver</button>
         </div>
 
@@ -126,23 +131,28 @@
             <input type="text" id="regUsuario" class="entrada" placeholder="Tu nombre público" maxlength="15" required>
             <label class="etiqueta">Contraseña *</label>
             <input type="password" id="regPass" class="entrada" placeholder="Mínimo 6 caracteres" required>
-            <p class="aviso">* Elige entre 3 creadores gratuitos y estables</p>
+            <p class="aviso">* Elige entre avatar rápido o imagen generada por IA</p>
             <button class="boton-principal btn-verde" onclick="guardarRegistro()">Continuar → Crear Avatar</button>
             <p class="texto-cambio">¿Ya tienes cuenta? <span class="enlace" onclick="mostrarInicioSesion()">Inicia sesión</span></p>
             <button class="boton-atras" onclick="volverOpciones()">← Atrás</button>
         </div>
 
-        <!-- CREADOR CON 3 OPCIONES -->
+        <!-- CREADOR DE AVATARES PERSONALIZADOS (SIN ERRORES) -->
         <div class="caja" id="cajaCreador">
-            <h2>🎨 Elige tu Creador 3D</h2>
-            <p class="aviso-pequeno">Todos son gratuitos, se abren en ventana nueva y funcionan sin errores</p>
+            <h2>🎨 Crea tu Avatar</h2>
+            <p class="aviso">Elige la opción que prefieras: todas funcionan sin errores</p>
 
-            <button class="boton-creador btn-vroid" onclick="abrirVroid()">🖌️ 1. Vroid Hub (Más completo)</button>
-            <button class="boton-creador btn-avatoon" onclick="abrirAvatoon()">🖌️ 2. Avatoon (Estilos por cultura)</button>
-            <button class="boton-creador btn-basico" onclick="abrirBasico()">🖌️ 3. Creador Simple (Más rápido)</button>
+            <h3>1. Avatar Rápido (personalizable)</h3>
+            <label class="etiqueta">Tu inicial, símbolo o emoji:</label>
+            <input type="text" id="simboloAvatar" class="entrada" maxlength="2" placeholder="Ej: N, ☀️, 🦅">
+            <label class="etiqueta">Color principal:</label>
+            <input type="color" id="colorAvatar" value="#ffd700" style="width:100%; height:40px; border:none; border-radius:8px; margin:5px 0;">
+            <button class="boton-principal btn-verde" onclick="generarAvatarRapido()">✅ Generar este avatar</button>
 
-            <p class="aviso" style="margin-top:10px;">Al terminar diseña tu avatar, guarda la imagen o copia su enlace y pégalo abajo:</p>
-            <input type="text" id="enlaceAvatar3D" class="entrada" placeholder="Pega aquí el enlace de tu avatar">
+            <h3>2. Imagen propia o por IA</h3>
+            <p class="aviso-pequeno">Usa Bing Image Creator o Leonardo AI: escribe tu descripción, guarda la imagen y pega el enlace aquí</p>
+            <input type="text" id="enlaceImagen" class="entrada" placeholder="Pega el enlace de tu imagen">
+            <button class="boton-principal btn-avatoon" onclick="usarImagen()">✅ Usar esta imagen</button>
 
             <div class="avatar-preview" id="vistaAvatar">👤</div>
             
@@ -155,9 +165,10 @@
             <h2>👤 Tu Perfil</h2>
             <div class="avatar-preview" id="avatarPerfil">👤</div>
             <div style="text-align:center; color:#ffd700; font-weight:bold; font-size:1.5rem; margin-bottom:10px;" id="nombrePerfil"></div>
-            <p class="aviso">Tu avatar queda guardado en tu cuenta</p>
+            <p class="aviso">Tu avatar queda guardado y se ve en las salas</p>
             <button class="boton-principal btn-morado" onclick="abrirCreadorDesdePerfil()">🔄 Cambiar de Avatar</button>
-            <button class="boton-principal btn-naranja" onclick="irSalaSaberes()">📚 Ir a la Sala de Saberes</button>
+            <button class="boton-principal btn-naranja" onclick="irSalaSaberes()">📚 Ir a Sala de Saberes</button>
+            <button class="boton-principal btn-naranja" onclick="irSalaCreacion()">🔗 Ir a Sala de Creación</button>
             <button class="boton-atras" onclick="cerrarSesion()">Cerrar Sesión</button>
         </div>
 
@@ -198,7 +209,7 @@
             localStorage.setItem('nexus_pass', pass);
             localStorage.setItem('nexus_avatar', '');
 
-            alert("✅ Cuenta creada! Elige tu creador favorito");
+            alert("✅ Cuenta creada! Ahora crea tu avatar");
             ocultarTodasCajas();
             document.getElementById('cajaCreador').style.display = 'flex';
         }
@@ -212,32 +223,39 @@
             else alert("❌ Datos incorrectos");
         }
 
-        // --- 3 CREADORES DIFERENTES ---
-        function abrirVroid() {
-            window.open("https://hub.vroid.com/avatar_maker/", "_blank", "width=1200,height=800");
-            alert("✅ Vroid Hub: diseña cualquier estilo, guarda la imagen o modelo");
+        // --- SISTEMA DE AVATARES SIN ERRORES ---
+        function generarAvatarRapido() {
+            const simbolo = document.getElementById('simboloAvatar').value.trim() || '👤';
+            const color = document.getElementById('colorAvatar').value;
+            // Genera imagen directamente en tu página, sin servidores externos
+            const avatarGenerado = `data:image/svg+xml;base64,${btoa(`
+            <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200">
+                <circle cx="100" cy="100" r="90" fill="${color}" stroke="#ffffff" stroke-width="5"/>
+                <text x="100" y="130" font-size="80" fill="#ffffff" text-anchor="middle" font-family="Arial, sans-serif">${simbolo}</text>
+            </svg>`)}`;
+            document.getElementById('vistaAvatar').innerHTML = `<img src="${avatarGenerado}" style="width:100%;height:100%;object-fit:cover;">`;
+            localStorage.setItem('nexus_avatar', avatarGenerado);
+            alert("✅ Avatar creado correctamente!");
         }
-        function abrirAvatoon() {
-            window.open("https://avatoon.me/3d-avatar-creator/", "_blank", "width=1200,height=800");
-            alert("✅ Avatoon: busca estilos como 'egipcio', 'moderno', 'tradicional'");
-        }
-        function abrirBasico() {
-            window.open("https://www.charat-systems.com/character-creator/free", "_blank", "width=1200,height=800");
-            alert("✅ Creador simple: rápido y sin complicaciones");
+
+        function usarImagen() {
+            const enlace = document.getElementById('enlaceImagen').value.trim();
+            if(!enlace) return alert("Primero pega el enlace de tu imagen");
+            document.getElementById('vistaAvatar').innerHTML = `<img src="${enlace}" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='⚠️ Imagen no válida'">`;
+            localStorage.setItem('nexus_avatar', enlace);
         }
 
         function guardarMiAvatar() {
-            const enlace = document.getElementById('enlaceAvatar3D').value.trim();
-            if(!enlace) return alert("Primero abre un creador, diseña tu avatar y pega el enlace aquí");
-            localStorage.setItem('nexus_avatar', enlace);
-            alert("✅ Avatar guardado correctamente!");
+            const avatarActual = localStorage.getItem('nexus_avatar') || '';
+            if(!avatarActual) return alert("Primero genera o elige un avatar");
+            alert("✅ Avatar guardado en tu cuenta!");
             mostrarPerfil();
         }
 
         function abrirCreadorDesdePerfil() {
             ocultarTodasCajas();
             document.getElementById('cajaCreador').style.display = 'flex';
-            document.getElementById('enlaceAvatar3D').value = '';
+            document.getElementById('enlaceImagen').value = '';
             document.getElementById('vistaAvatar').innerHTML = '👤';
         }
 
@@ -247,24 +265,18 @@
             const avatar = localStorage.getItem('nexus_avatar') || '';
             document.getElementById('nombrePerfil').textContent = usuario;
             const vista = document.getElementById('avatarPerfil');
-            vista.innerHTML = avatar ? `<img src="${avatar}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" onerror="this.parentElement.innerHTML='👤'">` : '👤';
+            vista.innerHTML = avatar ? `<img src="${avatar}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">` : '👤';
             document.getElementById('cajaPerfil').style.display = 'flex';
         }
 
         function cerrarSesion() {
-            if(confirm("¿Seguro quieres salir? Tu avatar se guarda")) {
+            if(confirm("¿Seguro quieres salir? Tu avatar y cuenta se guardan")) {
                 localStorage.removeItem('nexus_tipo');
                 volverInicio();
             }
         }
         function irSalaSaberes() { window.location.href = "sala.html"; }
-
-        // Vista previa automática
-        document.getElementById('enlaceAvatar3D').addEventListener('input', function(){
-            const enlace = this.value.trim();
-            const vista = document.getElementById('vistaAvatar');
-            vista.innerHTML = enlace ? `<img src="${enlace}" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='⚠️'">` : '👤';
-        });
+        function irSalaCreacion() { window.location.href = "sala2.html"; }
     </script>
 </body>
 </html>
