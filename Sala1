@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus - Sala de los Primeros Saberes</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { width: 100vw; height: 100vh; overflow: hidden; position: relative; }
+
+        .fondo-sala {
+            position: absolute; top:0; left:0; width:100%; height:100%;
+            background: linear-gradient(rgba(8,12,35,0.85), rgba(20,8,45,0.9)), 
+                        url('https://i.imgur.com/9XfQ7gL.png') center/cover no-repeat fixed;
+        }
+
+        .contenedor-sala {
+            position: relative; z-index:2; width:100%; height:100vh;
+            display: flex; flex-direction: column;
+        }
+
+        .barra-superior {
+            padding:12px 20px; background: rgba(12,8,30,0.95);
+            border-bottom:2px solid #ffd700; display:flex; align-items:center; justify-content:space-between;
+            flex-wrap: wrap; gap:10px;
+        }
+        .nombre-sala { color:#ffd700; font-size:1.3rem; font-weight:bold; text-shadow:0 0 10px rgba(255,215,0,0.4); }
+        .info-usuario { display:flex; align-items:center; gap:10px; color:#ccddff; font-size:0.95rem; }
+        .avatar-chico { width:35px; height:35px; border-radius:50%; border:2px solid #ffd700; background:#335; display:flex; align-items:center; justify-content:center; font-size:1.2rem; overflow:hidden; }
+        .boton-salir { padding:8px 15px; background:#cc3333; color:white; border:none; border-radius:8px; cursor:pointer; transition:0.3s; font-size:0.9rem; }
+        .boton-salir:hover { background:#ee4444; transform:scale(1.05); }
+
+        .navegacion { padding:8px 15px; background:rgba(15,10,40,0.8); display:flex; gap:10px; flex-wrap:wrap; justify-content:center; }
+        .boton-sala { padding:6px 12px; border-radius:15px; border:none; font-size:0.85rem; cursor:pointer; transition:0.3s; }
+        .boton-activo { background:#ffd700; color:#0a0a2a; font-weight:bold; }
+        .boton-otro { background:rgba(60,80,180,0.5); color:#ccddff; }
+        .boton-otro:hover { background:rgba(80,100,200,0.7); }
+
+        .tematica-sala { color:#aaffaa; font-size:0.8rem; text-align:center; padding:5px; background:rgba(0,0,0,0.3); border-top:1px solid #334; }
+
+        .zona-mensajes {
+            flex:1; padding:15px; overflow-y:auto; display:flex; flex-direction:column; gap:12px;
+            scroll-behavior: smooth;
+        }
+        .mensaje {
+            max-width:75%; padding:10px 15px; border-radius:15px; position:relative; animation: entrada 0.3s ease;
+        }
+        @keyframes entrada { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+        .mensaje-propio { align-self:flex-end; background:rgba(34,170,85,0.25); border:1px solid #22aa55; border-bottom-right-radius:5px; }
+        .mensaje-otro { align-self:flex-start; background:rgba(60,80,180,0.25); border:1px solid #8899ff; border-bottom-left-radius:5px; }
+        .nombre-autor { font-weight:bold; color:#ffd700; font-size:0.85rem; margin-bottom:3px; display:flex; align-items:center; gap:6px; }
+        .texto-mensaje { color:#fff; font-size:0.95rem; line-height:1.4; word-wrap:break-word; }
+        .fecha-mensaje { font-size:0.75rem; color:#8899aa; text-align:right; margin-top:4px; }
+        .mensaje-sistema { align-self:center; max-width:90%; background:rgba(255,215,0,0.1); border:1px solid #ffd700; color:#ffd700; text-align:center; font-size:0.9rem; padding:8px; border-radius:10px; }
+
+        .zona-envio {
+            padding:15px; background:rgba(12,8,30,0.95); border-top:2px solid #ffd700;
+            display:flex; gap:10px; flex-wrap:wrap;
+        }
+        .entrada-mensaje {
+            flex:1; min-width:200px; padding:12px 15px; border:2px solid #4455aa; border-radius:10px;
+            background:rgba(10,15,40,0.7); color:#fff; font-size:1rem;
+        }
+        .entrada-mensaje:focus { border-color:#ffd700; outline:none; }
+        .boton-enviar {
+            padding:12px 25px; background:linear-gradient(135deg,#ffd700,#ffaa00); color:#0a0a2a;
+            border:none; border-radius:10px; font-weight:bold; cursor:pointer; transition:0.3s;
+        }
+        .boton-enviar:hover { transform:scale(1.05); box-shadow:0 0 15px rgba(255,215,0,0.5); }
+
+        @media (max-width: 480px) {
+            .nombre-sala { font-size:1.1rem; }
+            .mensaje { max-width:90%; }
+            .zona-envio { padding:10px; }
+            .entrada-mensaje { min-width:100%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="fondo-sala"></div>
+    <div class="contenedor-sala">
+
+        <div class="barra-superior">
+            <div class="nombre-sala">🏛️ SALA DE LOS PRIMEROS SABERES</div>
+            <div class="info-usuario">
+                <div class="avatar-chico" id="avatarUsuarioBarra">👤</div>
+                <span id="nombreUsuarioBarra">Invitado</span>
+                <button class="boton-salir" onclick="irAInicio()">← Salir</button>
+            </div>
+        </div>
+
+        <div class="navegacion">
+            <button class="boton-sala boton-activo">📚 Saberes</button>
+            <button class="boton-sala boton-otro" onclick="irSala2()">🔗 Creación</button>
+        </div>
+
+        <div class="tematica-sala">🔎 Espacio para civilizaciones antiguas, conocimientos ancestrales y misterios olvidados</div>
+
+        <div class="zona-mensajes" id="zonaMensajes">
+            <div class="mensaje-sistema">Bienvenido. Aquí exploramos los saberes que nos precedieron ✨</div>
+        </div>
+
+        <div class="zona-envio">
+            <input type="text" class="entrada-mensaje" id="entradaMensaje" placeholder="Comparte tu investigación o duda..." maxlength="500" onkeydown="alPresionarEnter(event)">
+            <button class="boton-enviar" onclick="enviarMensaje()">Enviar</button>
+        </div>
+
+    </div>
+
+    <script>
+        const nombreUsuario = localStorage.getItem('nexus_nick') || 'Invitado_0000';
+        const avatarGuardado = localStorage.getItem('nexus_avatar') || '';
+
+        document.getElementById('nombreUsuarioBarra').textContent = nombreUsuario;
+        const avatarVista = document.getElementById('avatarUsuarioBarra');
+        avatarVista.innerHTML = avatarGuardado ? `<img src="${avatarGuardado}" style="width:100%;height:100%;object-fit:cover;">` : '👤';
+
+        const CLAVE_CHAT = 'nexus_sala_saberes_mensajes';
+        let mensajesGuardados = JSON.parse(localStorage.getItem(CLAVE_CHAT) || '[]');
+
+        function cargarMensajes() {
+            const zona = document.getElementById('zonaMensajes');
+            mensajesGuardados.forEach(m => agregarMensajeEnPantalla(m));
+            zona.scrollTop = zona.scrollHeight;
+        }
+
+        function agregarMensajeEnPantalla(m) {
+            const zona = document.getElementById('zonaMensajes');
+            const div = document.createElement('div');
+            div.className = m.esSistema ? 'mensaje-sistema' : (m.autor === nombreUsuario ? 'mensaje mensaje-propio' : 'mensaje mensaje-otro');
+            if(!m.esSistema) {
+                div.innerHTML = `
+                    <div class="nombre-autor">${m.avatar} ${m.autor}</div>
+                    <div class="texto-mensaje">${m.texto}</div>
+                    <div class="fecha-mensaje">${m.fecha}</div>
+                `;
+            } else { div.innerHTML = m.texto; }
+            zona.appendChild(div);
+        }
+
+        function enviarMensaje() {
+            const entrada = document.getElementById('entradaMensaje');
+            const texto = entrada.value.trim();
+            if(!texto) return;
+            const ahora = new Date();
+            const fechaTexto = ahora.toLocaleTimeString('es-MX', {hour:'2-digit', minute:'2-digit'});
+            const mensaje = {
+                autor: nombreUsuario, texto: texto, fecha: fechaTexto,
+                avatar: avatarGuardado ? '🖼️' : '👤', esSistema: false
+            };
+            mensajesGuardados.push(mensaje);
+            if(mensajesGuardados.length > 80) mensajesGuardados.shift();
+            localStorage.setItem(CLAVE_CHAT, JSON.stringify(mensajesGuardados));
+            agregarMensajeEnPantalla(mensaje);
+            entrada.value = '';
+            document.getElementById('zonaMensajes').scrollTop = document.getElementById('zonaMensajes').scrollHeight;
+        }
+
+        function alPresionarEnter(e) { if(e.key === 'Enter') enviarMensaje(); }
+        function irAInicio() { if(confirm("¿Volver al inicio?")) window.location.href = "index.html"; }
+        function irSala2() { window.location.href = "sala2.html"; }
+
+        cargarMensajes();
+    </script>
+</body>
+</html>
