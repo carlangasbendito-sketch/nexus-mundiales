@@ -40,6 +40,7 @@
         .boton-miembro:hover { transform: scale(1.03); box-shadow: 0 0 20px rgba(255,215,0,0.7); }
         .boton-editor { background: linear-gradient(135deg, #9955dd, #7733bb); color:#fff; }
         .boton-editor:hover { transform: scale(1.03); }
+        .aviso-editor { color:#ff9999; font-size:0.85rem; text-align:center; margin:5px 0; }
 
         .caja {
             display: none; flex-direction: column; gap: 12px; width: 100%; max-width: 420px;
@@ -80,12 +81,8 @@
         }
         .boton-atras:hover { background: #666; }
 
-        /* Creador y estilos completos */
-        .caja-avatar { max-width: 95%; max-height: 92vh; }
-        .marco-avatar {
-            width: 100%; height: 360px; border: 2px solid #ffd700; border-radius: 12px;
-            background: #000; margin: 10px 0;
-        }
+        /* Estilos y avatares */
+        .caja-avatar { max-width: 95%; }
         .aviso { color: #aaffaa; text-align: center; font-size: 0.85rem; line-height:1.4; }
         .grupo-estilos { margin:10px 0; }
         .titulo-grupo { color:#ffd700; font-weight:bold; margin-bottom:5px; font-size:1rem; }
@@ -95,7 +92,7 @@
         .contador-avatares { color: #ffd700; text-align:center; font-weight:bold; margin:5px 0; }
         .lista-avatares {
             display: grid; grid-template-columns: repeat(2, 1fr); gap:10px; margin:10px 0;
-            max-height:200px; overflow-y:auto; padding:5px;
+            max-height:220px; overflow-y:auto; padding:5px;
         }
         .tarjeta-avatar {
             background: rgba(30,20,60,0.8); border:2px solid #556; border-radius:10px;
@@ -111,7 +108,6 @@
             .caja { padding: 15px; }
             .lista-estilos { grid-template-columns:1fr; }
             .lista-avatares { grid-template-columns:1fr; }
-            .marco-avatar { height: 300px; }
         }
     </style>
 </head>
@@ -158,9 +154,10 @@
             <button class="boton-atras" onclick="volverOpciones()">← Atrás</button>
         </div>
 
-        <!-- Creador con TODOS los estilos -->
+        <!-- Creador SIN ERRORES: abre en ventana nueva -->
         <div class="caja caja-avatar" id="cajaCreadorAvatar">
-            <h2>🎨 Todos los Estilos de Avatar</h2>
+            <h2>🎨 Crea tu Avatar</h2>
+            <p class="aviso-editor">⚠️ Los editores se abren en ventana nueva (no se pueden mostrar aquí directamente)</p>
             
             <div class="grupo-estilos">
                 <div class="titulo-grupo">🏛️ Civilizaciones Antiguas</div>
@@ -188,12 +185,12 @@
                 </div>
             </div>
 
-            <p class="aviso">Abre el editor y combina ropa, accesorios y detalles para crear el estilo que quieras.</p>
-            <button class="boton-editor" onclick="abrirEditor1()">🖌️ Editor Completo (Vroid)</button>
-            <button class="boton-editor" onclick="abrirEditor2()">🖌️ Editor Rápido (Avatoon)</button>
-            <iframe id="marcoEditor" class="marco-avatar" src="" allow="camera; microphone; *" sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
+            <button class="boton-editor" onclick="abrirEditor1()">🖌️ Editor Completo (Vroid Hub - Gratis)</button>
+            <button class="boton-editor" onclick="abrirEditor2()">🖌️ Editor Rápido (Ready Player Me - Gratis)</button>
+            <p class="aviso">Al terminar, guarda tu diseño y pega el enlace o imagen abajo</p>
             <input type="text" id="enlaceAvatar" class="entrada" placeholder="Pega aquí el enlace/imagen de tu avatar" style="margin-top:10px;">
             <button class="boton-principal btn-verde" onclick="guardarAvatarEspacio()">✅ Guardar en mi espacio</button>
+            <button class="boton-principal btn-morado" onclick="usarAvatarPredeterminado()">🎯 Usar avatar listo</button>
             <button class="boton-atras" onclick="volverPerfil()">← Volver al perfil</button>
         </div>
 
@@ -201,7 +198,7 @@
         <div class="caja" id="cajaPerfil">
             <div class="espacio-usuario">🔐 Tu espacio exclusivo</div>
             <div class="perfil-nombre" id="nombrePerfil" style="text-align:center; color:#ffd700; font-size:1.7rem; font-weight:bold;"></div>
-            <p class="aviso">Tus avatares (históricos y modernos) se guardan solo para ti</p>
+            <p class="aviso">Tus avatares se guardan solo para ti</p>
             <div class="contador-avatares" id="contadorAvatares"></div>
             <div class="lista-avatares" id="listaAvatares"></div>
             <button class="boton-principal btn-morado" onclick="abrirCreadorDesdePerfil()">➕ Crear otro Avatar</button>
@@ -213,6 +210,19 @@
 
     <script>
         const MAX_AVATARES = 10;
+        // Avatares listos por si no quieres usar enlaces externos
+        const AVATARES_LISTOS = [
+            {id:1, nombre:"Explorador Antiguo", icono:"🗺️"},
+            {id:2, nombre:"Sabio Ancestral", icono:"📜"},
+            {id:3, nombre:"Guerrero Tradicional", icono:"⚔️"},
+            {id:4, nombre:"Místico", icono:"✨"},
+            {id:5, nombre:"Cibernético", icono:"🤖"},
+            {id:6, nombre:"Explorador Espacial", icono:"🚀"},
+            {id:7, nombre:"Urbano Actual", icono:"🏙️"},
+            {id:8, nombre:"Investigador", icono:"🔍"},
+            {id:9, nombre:"Guardían", icono:"🛡️"},
+            {id:10, nombre:"Creador", icono:"🎨"}
+        ];
 
         function mostrarOpciones() {
             document.getElementById('btnInicio').style.display = 'none';
@@ -251,7 +261,7 @@
             const claveEspacio = `avatares_${usuario}`;
             localStorage.setItem(claveEspacio, JSON.stringify([]));
 
-            alert("✅ Cuenta creada! Elige el estilo de tu avatar");
+            alert("✅ Cuenta creada! Elige tu avatar");
             ocultarTodasCajas();
             document.getElementById('cajaCreadorAvatar').style.display = 'flex';
         }
@@ -265,34 +275,48 @@
             else alert("❌ Datos incorrectos");
         }
 
-        // Editores con todos los estilos
+        // Editores abren en ventana nueva SIN ERRORES
         function abrirEditor1() {
-            document.getElementById('marcoEditor').src = "https://hub.vroid.com/avatar_maker/";
-            alert("✅ Vroid: busca 'futurista', 'urbano', 'tradicional' para encontrar los estilos");
+            window.open("https://hub.vroid.com/avatar_maker/", "_blank", "width=1200,height=800,scrollbars=yes");
+            alert("✅ Se abrió Vroid Hub. Diseña tu avatar y guarda el enlace o imagen");
         }
         function abrirEditor2() {
-            document.getElementById('marcoEditor').src = "https://avatoon.me/3d-avatar-creator/";
-            alert("✅ Avatoon: elige categoría o busca el estilo que quieras");
+            window.open("https://vr.readyplayer.me/avatar?lang=es", "_blank", "width=1200,height=800,scrollbars=yes");
+            alert("✅ Se abrió Ready Player Me. Guarda tu diseño y copia el enlace");
         }
 
         // Espacio exclusivo por usuario
         function obtenerEspacioUsuario() { return `avatares_${localStorage.getItem('nexus_nick')}`; }
+        
+        function usarAvatarPredeterminado() {
+            const clave = obtenerEspacioUsuario();
+            let avatares = JSON.parse(localStorage.getItem(clave) || '[]');
+            if(avatares.length >= MAX_AVATARES) return alert(`⚠️ Límite: ${MAX_AVATARES} avatares`);
+            const predet = AVATARES_LISTOS[avatares.length];
+            avatares.push({id:Date.now(), nombre:predet.nombre, icono:predet.icono, url:'', activo:avatares.length===0});
+            localStorage.setItem(clave, JSON.stringify(avatares));
+            alert("✅ Avatar listo agregado!");
+            mostrarPerfil();
+        }
+
         function guardarAvatarEspacio() {
             const clave = obtenerEspacioUsuario();
             let avatares = JSON.parse(localStorage.getItem(clave) || '[]');
             if(avatares.length >= MAX_AVATARES) return alert(`⚠️ Límite: ${MAX_AVATARES} avatares`);
             const enlace = document.getElementById('enlaceAvatar').value.trim() || '';
-            avatares.push({id:Date.now(), nombre:`Avatar ${avatares.length+1}`, url:enlace, activo:avatares.length===0});
+            avatares.push({id:Date.now(), nombre:`Avatar ${avatares.length+1}`, url:enlace, icono:'👤', activo:avatares.length===0});
             localStorage.setItem(clave, JSON.stringify(avatares));
             alert("✅ Avatar guardado en tu espacio!");
             mostrarPerfil();
         }
+
         function abrirCreadorDesdePerfil() {
             const avatares = JSON.parse(localStorage.getItem(obtenerEspacioUsuario()) || '[]');
             if(avatares.length >= MAX_AVATARES) return alert("⚠️ Límite alcanzado");
             ocultarTodasCajas();
             document.getElementById('cajaCreadorAvatar').style.display = 'flex';
         }
+
         function cargarEspacioAvatares() {
             const avatares = JSON.parse(localStorage.getItem(obtenerEspacioUsuario()) || '[]');
             document.getElementById('contadorAvatares').textContent = `📦 Tus avatares: ${avatares.length}/${MAX_AVATARES}`;
@@ -302,7 +326,7 @@
                 const tarjeta = document.createElement('div');
                 tarjeta.className = `tarjeta-avatar ${a.activo?'activo':''}`;
                 tarjeta.innerHTML = `
-                    <div class="avatar-img">${a.url?`<img src="${a.url}" style="width:100%;height:100%;object-fit:cover;" onerror="this.innerHTML='👤'">`:'👤'}</div>
+                    <div class="avatar-img">${a.url?`<img src="${a.url}" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='${a.icono||'👤'}'">`:(a.icono||'👤')}</div>
                     <div class="nombre-avatar">${a.nombre} ${a.activo?'⭐':''}</div>
                     <button class="btn-verde" style="font-size:0.8rem; padding:5px;" onclick="usarEste(${a.id})">Usar</button>
                     ${!a.activo?`<button class="btn-rojo" onclick="eliminarEste(${a.id})">Eliminar</button>`:''}
@@ -310,6 +334,7 @@
                 lista.appendChild(tarjeta);
             });
         }
+
         function usarEste(id) {
             const clave = obtenerEspacioUsuario();
             let avatares = JSON.parse(localStorage.getItem(clave));
