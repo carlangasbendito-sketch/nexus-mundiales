@@ -374,8 +374,14 @@
 
     </div>
 
-    <script>
+     <script>
         const MAX_AVATARES = 10;
+
+        // ✅ FALTA ESTA FUNCIÓN: la que abre el menú al presionar el botón principal
+        function mostrarOpciones() {
+            document.getElementById('btnInicio').style.display = 'none';
+            document.getElementById('cajaOpciones').style.display = 'flex';
+        }
 
         function ocultarTodasCajas() {
             document.querySelectorAll('.caja').forEach(caja => caja.style.display = 'none');
