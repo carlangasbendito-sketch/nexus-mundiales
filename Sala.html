@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus - Sala de Saberes</title>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; font-family:inherit; }
+        body { width:100vw; height:100vh; overflow:hidden; position:relative; }
+
+        .fondo { position:absolute; top:0; left:0; width:100%; height:100%; background:linear-gradient(180deg, #05071a, #101a40); }
+        .estrellas { position:absolute; top:0; left:0; width:100%; height:100%; background-image:radial-gradient(1px 1px at 50px 80px, #fff, transparent); background-size:150px 150px; opacity:0.6; }
+
+        .contenedor { position:relative; z-index:2; width:100%; height:100vh; display:flex; flex-direction:column; }
+
+        .barra { padding:12px 15px; background:rgba(10,15,40,0.9); border-bottom:2px solid #ffd700; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; }
+        .titulo-sala { color:#ffd700; font-size:1.2rem; font-weight:bold; }
+        .usuario { display:flex; align-items:center; gap:8px; color:#cce0ff; font-size:0.9rem; }
+        .avatar-chico { width:32px; height:32px; border-radius:50%; border:2px solid #ffd700; overflow:hidden; display:flex; align-items:center; justify-content:center; font-size:1rem; }
+        .btn-salir { padding:6px 12px; background:#cc3333; color:white; border:none; border-radius:8px; cursor:pointer; }
+
+        .nav { padding:8px; background:rgba(15,20,50,0.8); display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+        .btn-nav { padding:5px 12px; border-radius:12px; border:none; font-size:0.85rem; cursor:pointer; }
+        .activo { background:#ffd700; color:#000; font-weight:bold; }
+        .inactivo { background:rgba(60,90,180,0.6); color:#fff; }
+
+        .tema { color:#aaddff; font-size:0.8rem; text-align:center; padding:5px; background:rgba(0,0,0,0.2); }
+
+        .chat { flex:1; padding:15px; overflow-y:auto; display:flex; flex-direction:column; gap:10px; }
+        .msg { max-width:75%; padding:10px 15px; border-radius:15px; animation:entra 0.3s; }
+        @keyframes entra { from{opacity:0;transform:translateY(5px);} to{opacity:1;transform:translateY(0);} }
+        .mio { align-self:flex-end; background:rgba(255,215,0,0.15); border:1px solid #ffd700; border-bottom-right-radius:5px; }
+        .otro { align-self:flex-start; background:rgba(80,120,200,0.2); border:1px solid #6699ff; border-bottom-left-radius:5px; }
+        .autor { color:#ffd700; font-weight:bold; font-size:0.8rem; margin-bottom:3px; }
+        .texto { color:#fff; font-size:0.95rem; }
+        .hora { font-size:0.7rem; color:#8899bb; text-align:right; margin-top:3px; }
+        .sistema { align-self:center; color:#aaddff; font-size:0.85rem; padding:6px; background:rgba(50,80,150,0.2); border-radius:8px; }
+
+        .envio { padding:12px; background:rgba(10,15,40,0.9); border-top:2px solid #ffd700; display:flex; gap:8px; flex-wrap:wrap; }
+        .entrada { flex:1; min-width:180px; padding:10px; border:2px solid #4466aa; border-radius:10px; background:rgba(15,20,50,0.8); color:#fff; }
+        .btn-enviar { padding:10px 20px; background:linear-gradient(135deg,#ffd700,#ffaa00); color:#000; font-weight:bold; border:none; border-radius:10px; cursor:pointer; }
+
+        @media (max-width:480px) { .msg{max-width:90%;} }
+    </style>
+</head>
+<body>
+    <div class="fondo"></div><div class="estrellas"></div>
+    <div class="contenedor">
+        <div class="barra">
+            <div class="titulo-sala">🏛️ SALA DE SABERES</div>
+            <div class="usuario">
+                <div class="avatar-chico" id="avUser">👤</div>
+                <span id="nomUser">Invitado</span>
+                <button class="btn-salir" onclick="irInicio()">Salir</button>
+            </div>
+        </div>
+        <div class="nav">
+            <button class="btn-nav activo">📚 Saberes</button>
+            <button class="btn-nav inactivo" onclick="irSala2()">🔗 Creación</button>
+        </div>
+        <div class="tema">Espacio para civilizaciones antiguas, misterios y conocimientos ancestrales</div>
+        <div class="chat" id="zonaChat">
+            <div class="sistema">✨ Bienvenido al espacio de los primeros saberes</div>
+        </div>
+        <div class="envio">
+            <input type="text" class="entrada" id="txtMsg" placeholder="Escribe tu mensaje..." maxlength="500" onkeydown="enter(event)">
+            <button class="btn-enviar" onclick="enviar()">Enviar</button>
+        </div>
+    </div>
+
+    <script>
+        const nom = localStorage.getItem('nexus_nick') || 'Invitado';
+        const av = localStorage.getItem('nexus_avatar') || '';
+        document.getElementById('nomUser').textContent = nom;
+        document.getElementById('avUser').innerHTML = av ? `<img src="${av}" style="width:100%;height:100%;object-fit:cover;">` : '👤';
+
+        const clave = 'nexus_sala1_msg';
+        let mensajes = JSON.parse(localStorage.getItem(clave) || '[]');
+
+        function cargar() { mensajes.forEach(m => agregar(m)); document.getElementById('zonaChat').scrollTop = 99999; }
+        function agregar(m) {
+            const z = document.getElementById('zonaChat');
+            const d = document.createElement('div');
+            d.className = m.sis ? 'sistema' : (m.autor===nom ? 'msg mio' : 'msg otro');
+            d.innerHTML = m.sis ? m.t : `<div class="autor">${m.autor}</div><div class="texto">${m.t}</div><div class="hora">${m.h}</div>`;
+            z.appendChild(d);
+        }
+        function enviar() {
+            const t = document.getElementById('txtMsg').value.trim();
+            if(!t) return;
+            const h = new Date().toLocaleTimeString('es-MX', {hour:'2-digit', minute:'2-digit'});
+            const m = {autor:nom, t:t, h:h, sis:false};
+            mensajes.push(m);
+            if(mensajes.length>80) mensajes.shift();
+            localStorage.setItem(clave, JSON.stringify(mensajes));
+            agregar(m);
+            document.getElementById('txtMsg').value='';
+            document.getElementById('zonaChat').scrollTop = 99999;
+        }
+        function enter(e) { if(e.key==='Enter') enviar(); }
+        function irInicio() { if(confirm("¿Volver al inicio?")) window.location.href='index.html'; }
+        function irSala2() { window.location.href='sala2.html'; }
+
+        cargar();
+    </script>
+</body>
+</html>
