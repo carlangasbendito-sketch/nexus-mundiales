@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus - Avatares: Historia + Moderno</title>
+    <title>Nexus - Creador de Avatar 3D</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
         body { width: 100vw; height: 100vh; overflow-x: hidden; position: relative; }
@@ -21,7 +21,7 @@
         }
 
         .titulo { color: #ffd700; font-size: 2.2rem; font-weight: 700; text-shadow: 0 0 20px rgba(255,215,0,0.5); text-align: center; }
-        .subtitulo { color:#aaccff; font-size:1rem; text-align:center; margin-bottom:10px; }
+        .subtitulo { color:#aaccff; font-size:1rem; text-align:center; margin-bottom:15px; line-height:1.4; }
 
         .boton-entrar {
             padding: 15px 50px; font-size: 1.4rem; font-weight: 600; color: #0a0a2a;
@@ -30,7 +30,7 @@
         }
         .boton-entrar:hover { transform: scale(1.07); box-shadow: 0 0 35px rgba(255,215,0,0.8); }
 
-        .boton-invitado, .boton-miembro, .boton-editor {
+        .boton-invitado, .boton-miembro, .boton-creador {
             padding: 12px 40px; font-size: 1.1rem; border-radius: 50px; border: none;
             cursor: pointer; transition: 0.3s; margin: 5px 0; width:100%;
         }
@@ -38,18 +38,17 @@
         .boton-invitado:hover { background: rgba(80,100,200,0.9); transform: scale(1.03); }
         .boton-miembro { background: linear-gradient(135deg, #ffd700, #ffaa00); color:#0a0a2a; font-weight:600; }
         .boton-miembro:hover { transform: scale(1.03); box-shadow: 0 0 20px rgba(255,215,0,0.7); }
-        .boton-editor { background: linear-gradient(135deg, #9955dd, #7733bb); color:#fff; }
-        .boton-editor:hover { transform: scale(1.03); }
-        .aviso-editor { color:#ff9999; font-size:0.85rem; text-align:center; margin:5px 0; }
+        .boton-creador { background: linear-gradient(135deg, #22aa99, #118877); color:#fff; font-weight:bold; margin-top:10px; }
+        .boton-creador:hover { transform: scale(1.05); box-shadow:0 0 15px rgba(34,170,153,0.5); }
 
         .caja {
             display: none; flex-direction: column; gap: 12px; width: 100%; max-width: 420px;
-            background: rgba(15,10,40,0.92); padding: 20px; border-radius: 20px;
+            background: rgba(15,10,40,0.92); padding: 25px; border-radius: 20px;
             border: 2px solid #ffd700; animation: aparecer 0.5s ease;
         }
         @keyframes aparecer { from { opacity:0; transform:translateY(15px); } to { opacity:1; transform:translateY(0); } }
 
-        .caja h2 { color: #ffd700; text-align: center; font-size: 1.4rem; margin-bottom:5px; }
+        .caja h2 { color: #ffd700; text-align: center; font-size: 1.5rem; margin-bottom:8px; }
         .etiqueta { color: #ccddff; font-size: 0.95rem; margin-top:5px; }
         .entrada {
             padding: 12px 15px; font-size: 1rem; border: 2px solid #4455aa; border-radius: 10px;
@@ -60,18 +59,16 @@
 
         .boton-principal {
             padding: 12px; font-size: 1.1rem; font-weight: 500; border: none; border-radius: 10px;
-            cursor: pointer; transition: 0.3s; margin-top:5px; width:100%;
+            cursor: pointer; transition: 0.3s; margin-top:10px; width:100%;
         }
         .btn-verde { background: #22aa55; color: white; }
         .btn-verde:hover { background: #33cc66; }
-        .btn-morado { background: #9955dd; color: white; }
-        .btn-morado:hover { background: #aa66ee; }
         .btn-naranja { background: #ff8822; color: white; }
         .btn-naranja:hover { background: #ff9944; }
         .btn-rojo { background: #cc3333; color: white; font-size:0.9rem; padding:8px; border-radius:8px; width:100%; }
         .btn-rojo:hover { background: #ee4444; }
 
-        .texto-cambio { color: #aaccff; text-align: center; font-size: 0.9rem; margin-top:5px; }
+        .texto-cambio { color: #aaccff; text-align: center; font-size: 0.9rem; margin-top:8px; }
         .enlace { color: #ffd700; cursor: pointer; font-weight: 500; }
         .enlace:hover { text-decoration: underline; }
 
@@ -81,33 +78,13 @@
         }
         .boton-atras:hover { background: #666; }
 
-        /* Estilos y avatares */
-        .caja-avatar { max-width: 95%; }
-        .aviso { color: #aaffaa; text-align: center; font-size: 0.85rem; line-height:1.4; }
-        .grupo-estilos { margin:10px 0; }
-        .titulo-grupo { color:#ffd700; font-weight:bold; margin-bottom:5px; font-size:1rem; }
-        .lista-estilos { display:grid; grid-template-columns:repeat(2,1fr); gap:6px; }
-        .estilo-item { background:rgba(30,20,60,0.8); border:1px solid #556; border-radius:8px; padding:6px; text-align:center; color:#fff; font-size:0.85rem; }
-        .espacio-usuario { color:#ffd700; text-align:center; font-weight:bold; margin-bottom:10px; }
-        .contador-avatares { color: #ffd700; text-align:center; font-weight:bold; margin:5px 0; }
-        .lista-avatares {
-            display: grid; grid-template-columns: repeat(2, 1fr); gap:10px; margin:10px 0;
-            max-height:220px; overflow-y:auto; padding:5px;
-        }
-        .tarjeta-avatar {
-            background: rgba(30,20,60,0.8); border:2px solid #556; border-radius:10px;
-            padding:10px; text-align:center; transition:0.3s;
-        }
-        .tarjeta-avatar.activo { border-color:#ffd700; box-shadow:0 0 10px rgba(255,215,0,0.5); }
-        .tarjeta-avatar:hover { border-color:#8899ff; }
-        .avatar-img { width:65px; height:65px; border-radius:50%; margin:0 auto 5px; object-fit:cover; border:2px solid #ffd700; background:#335; display:flex; align-items:center; justify-content:center; font-size:2rem; color:#ffd700; }
-        .nombre-avatar { color:#fff; font-size:0.9rem; margin-bottom:5px; }
+        .aviso { color: #aaffaa; text-align: center; font-size: 0.9rem; line-height:1.5; }
+        .avatar-guardado { text-align:center; color:#ffd700; font-weight:bold; margin:10px 0; }
+        .avatar-preview { width:100px; height:100px; border-radius:50%; border:3px solid #ffd700; margin:0 auto; background:#335; display:flex; align-items:center; justify-content:center; font-size:3rem; color:#ffd700; overflow:hidden; }
 
         @media (max-width: 480px) {
             .titulo { font-size: 1.8rem; }
-            .caja { padding: 15px; }
-            .lista-estilos { grid-template-columns:1fr; }
-            .lista-avatares { grid-template-columns:1fr; }
+            .caja { padding: 20px 15px; }
         }
     </style>
 </head>
@@ -122,10 +99,10 @@
         <div class="caja" id="cajaOpciones">
             <h2>Elige tu forma de acceso</h2>
             <button class="boton-invitado" onclick="accesoInvitado()">🚪 Entrar como Invitado</button>
-            <p class="texto-cambio">Explora rápido, sin espacio individual</p>
+            <p class="texto-cambio">Explora rápido</p>
             <button class="boton-miembro" onclick="mostrarInicioSesion()">👤 Soy Miembro</button>
-            <button class="boton-miembro" onclick="mostrarRegistro()">✨ Crear cuenta de Miembro</button>
-            <p class="texto-cambio">Avatares históricos + modernos: todos los estilos</p>
+            <button class="boton-miembro" onclick="mostrarRegistro()">✨ Crear cuenta</button>
+            <p class="texto-cambio">Diseña tu propio avatar 3D único</p>
             <button class="boton-atras" onclick="volverInicio()">← Volver</button>
         </div>
 
@@ -141,67 +118,43 @@
             <button class="boton-atras" onclick="volverOpciones()">← Atrás</button>
         </div>
 
-        <!-- Registro simplificado -->
+        <!-- Registro -->
         <div class="caja" id="cajaRegistro">
             <h2>Crear tu Cuenta</h2>
             <label class="etiqueta">Nombre de Usuario *</label>
             <input type="text" id="regUsuario" class="entrada" placeholder="Tu nombre público" maxlength="15" required>
             <label class="etiqueta">Contraseña *</label>
             <input type="password" id="regPass" class="entrada" placeholder="Mínimo 6 caracteres" required>
-            <p class="aviso">* Todos los estilos se guardan en tu espacio exclusivo</p>
+            <p class="aviso">* Diseña tu avatar 3D totalmente personalizado después</p>
             <button class="boton-principal btn-verde" onclick="guardarRegistro()">Continuar → Crear Avatar</button>
             <p class="texto-cambio">¿Ya tienes cuenta? <span class="enlace" onclick="mostrarInicioSesion()">Inicia sesión</span></p>
             <button class="boton-atras" onclick="volverOpciones()">← Atrás</button>
         </div>
 
-        <!-- Creador SIN ERRORES: abre en ventana nueva -->
-        <div class="caja caja-avatar" id="cajaCreadorAvatar">
-            <h2>🎨 Crea tu Avatar</h2>
-            <p class="aviso-editor">⚠️ Los editores se abren en ventana nueva (no se pueden mostrar aquí directamente)</p>
+        <!-- CREADOR DE AVATAR 3D ACTUAL -->
+        <div class="caja" id="cajaCreador">
+            <h2>🎨 Creador de Avatar 3D</h2>
+            <p class="aviso">Usamos el creador más completo y actual: diseña cualquier estilo (antiguo, moderno, fantástico) y guárdalo aquí.</p>
             
-            <div class="grupo-estilos">
-                <div class="titulo-grupo">🏛️ Civilizaciones Antiguas</div>
-                <div class="lista-estilos">
-                    <div class="estilo-item">Egipcio</div>
-                    <div class="estilo-item">Árabe / Islámico</div>
-                    <div class="estilo-item">Nativo Norteamérica</div>
-                    <div class="estilo-item">Mesoamericano</div>
-                    <div class="estilo-item">Griego / Romano</div>
-                    <div class="estilo-item">Andino / Inca</div>
-                </div>
-            </div>
-
-            <div class="grupo-estilos">
-                <div class="titulo-grupo">🚀 Modalidades Modernas</div>
-                <div class="lista-estilos">
-                    <div class="estilo-item">Cibernético / Futuro</div>
-                    <div class="estilo-item">Urbano / Callejero</div>
-                    <div class="estilo-item">Digital / Metaverso</div>
-                    <div class="estilo-item">Deportivo / Actual</div>
-                    <div class="estilo-item">Elegante / Formal</div>
-                    <div class="estilo-item">Ciencia Ficción</div>
-                    <div class="estilo-item">Anime / Juegos</div>
-                    <div class="estilo-item">Minimalista</div>
-                </div>
-            </div>
-
-            <button class="boton-editor" onclick="abrirEditor1()">🖌️ Editor Completo (Vroid Hub - Gratis)</button>
-            <button class="boton-editor" onclick="abrirEditor2()">🖌️ Editor Rápido (Ready Player Me - Gratis)</button>
-            <p class="aviso">Al terminar, guarda tu diseño y pega el enlace o imagen abajo</p>
-            <input type="text" id="enlaceAvatar" class="entrada" placeholder="Pega aquí el enlace/imagen de tu avatar" style="margin-top:10px;">
-            <button class="boton-principal btn-verde" onclick="guardarAvatarEspacio()">✅ Guardar en mi espacio</button>
-            <button class="boton-principal btn-morado" onclick="usarAvatarPredeterminado()">🎯 Usar avatar listo</button>
-            <button class="boton-atras" onclick="volverPerfil()">← Volver al perfil</button>
+            <button class="boton-creador" onclick="abrirCreador3D()">🖌️ ABRIR CREADOR 3D AHORA</button>
+            <p class="aviso" style="margin-top:10px;">Se abrirá en ventana nueva. Al terminar copia el enlace de tu avatar y pégalo abajo.</p>
+            
+            <input type="text" id="enlaceAvatar3D" class="entrada" placeholder="Pega aquí el enlace de tu avatar 3D" style="margin-top:10px;">
+            
+            <div class="avatar-guardado" id="textoPreview" style="display:none;">✅ Tu avatar está guardado:</div>
+            <div class="avatar-preview" id="vistaAvatar">👤</div>
+            
+            <button class="boton-principal btn-verde" onclick="guardarMiAvatar()">✅ Guardar y continuar</button>
+            <button class="boton-atras" onclick="volverPerfil()">← Volver más tarde</button>
         </div>
 
-        <!-- Perfil y tu espacio exclusivo -->
+        <!-- Perfil simple -->
         <div class="caja" id="cajaPerfil">
-            <div class="espacio-usuario">🔐 Tu espacio exclusivo</div>
-            <div class="perfil-nombre" id="nombrePerfil" style="text-align:center; color:#ffd700; font-size:1.7rem; font-weight:bold;"></div>
-            <p class="aviso">Tus avatares se guardan solo para ti</p>
-            <div class="contador-avatares" id="contadorAvatares"></div>
-            <div class="lista-avatares" id="listaAvatares"></div>
-            <button class="boton-principal btn-morado" onclick="abrirCreadorDesdePerfil()">➕ Crear otro Avatar</button>
+            <h2>👤 Tu Perfil</h2>
+            <div class="avatar-preview" id="avatarPerfil">👤</div>
+            <div class="avatar-guardado" id="nombrePerfil"></div>
+            <p class="aviso">Tu avatar 3D está listo para usar en las salas</p>
+            <button class="boton-principal btn-morado" onclick="abrirCreadorDesdePerfil()">🔄 Cambiar Avatar 3D</button>
             <button class="boton-principal btn-naranja" onclick="irSalaSaberes()">📚 Ir a la Sala de Saberes</button>
             <button class="boton-atras" onclick="cerrarSesion()">Cerrar Sesión</button>
         </div>
@@ -209,21 +162,7 @@
     </div>
 
     <script>
-        const MAX_AVATARES = 10;
-        // Avatares listos por si no quieres usar enlaces externos
-        const AVATARES_LISTOS = [
-            {id:1, nombre:"Explorador Antiguo", icono:"🗺️"},
-            {id:2, nombre:"Sabio Ancestral", icono:"📜"},
-            {id:3, nombre:"Guerrero Tradicional", icono:"⚔️"},
-            {id:4, nombre:"Místico", icono:"✨"},
-            {id:5, nombre:"Cibernético", icono:"🤖"},
-            {id:6, nombre:"Explorador Espacial", icono:"🚀"},
-            {id:7, nombre:"Urbano Actual", icono:"🏙️"},
-            {id:8, nombre:"Investigador", icono:"🔍"},
-            {id:9, nombre:"Guardían", icono:"🛡️"},
-            {id:10, nombre:"Creador", icono:"🎨"}
-        ];
-
+        // --- Navegación ---
         function mostrarOpciones() {
             document.getElementById('btnInicio').style.display = 'none';
             document.getElementById('cajaOpciones').style.display = 'flex';
@@ -235,35 +174,31 @@
         function volverOpciones() { ocultarTodasCajas(); document.getElementById('cajaOpciones').style.display = 'flex'; }
         function volverPerfil() { ocultarTodasCajas(); document.getElementById('cajaPerfil').style.display = 'flex'; }
 
-        // Acceso Invitado
+        // --- Acceso ---
         function accesoInvitado() {
             const nombreTemp = "Invitado_" + Math.floor(Math.random()*9999);
-            alert(`👋 Bienvenido ${nombreTemp}! Entrando a la Sala...`);
+            alert(`👋 Bienvenido ${nombreTemp}! Entrando...`);
             localStorage.setItem('nexus_tipo', 'invitado');
             localStorage.setItem('nexus_nick', nombreTemp);
             window.location.href = "sala.html";
         }
-
         function mostrarInicioSesion() { ocultarTodasCajas(); document.getElementById('cajaLogin').style.display = 'flex'; }
         function mostrarRegistro() { ocultarTodasCajas(); document.getElementById('cajaRegistro').style.display = 'flex'; }
 
         function guardarRegistro() {
             const usuario = document.getElementById('regUsuario').value.trim();
             const pass = document.getElementById('regPass').value.trim();
-            if(usuario.length <2) return alert("El usuario debe tener al menos 2 caracteres");
-            if(pass.length <6) return alert("La contraseña debe tener al menos 6 caracteres");
+            if(usuario.length <2) return alert("Mínimo 2 caracteres para el usuario");
+            if(pass.length <6) return alert("Mínimo 6 caracteres para la contraseña");
 
             localStorage.setItem('nexus_tipo', 'miembro');
             localStorage.setItem('nexus_nick', usuario);
             localStorage.setItem('nexus_pass', pass);
-            localStorage.setItem('nexus_correo', 'Sin especificar');
-            localStorage.setItem('nexus_nacion', 'Sin especificar');
-            const claveEspacio = `avatares_${usuario}`;
-            localStorage.setItem(claveEspacio, JSON.stringify([]));
+            localStorage.setItem('nexus_avatar', '');
 
-            alert("✅ Cuenta creada! Elige tu avatar");
+            alert("✅ Cuenta creada! Ahora diseña tu avatar 3D");
             ocultarTodasCajas();
-            document.getElementById('cajaCreadorAvatar').style.display = 'flex';
+            document.getElementById('cajaCreador').style.display = 'flex';
         }
 
         function verificarLogin() {
@@ -275,81 +210,59 @@
             else alert("❌ Datos incorrectos");
         }
 
-        // Editores abren en ventana nueva SIN ERRORES
-        function abrirEditor1() {
-            window.open("https://hub.vroid.com/avatar_maker/", "_blank", "width=1200,height=800,scrollbars=yes");
-            alert("✅ Se abrió Vroid Hub. Diseña tu avatar y guarda el enlace o imagen");
-        }
-        function abrirEditor2() {
-            window.open("https://vr.readyplayer.me/avatar?lang=es", "_blank", "width=1200,height=800,scrollbars=yes");
-            alert("✅ Se abrió Ready Player Me. Guarda tu diseño y copia el enlace");
+        // --- CREADOR 3D ---
+        function abrirCreador3D() {
+            // Creador oficial, actual y gratuito: Ready Player Me
+            window.open("https://vr.readyplayer.me/avatar?lang=es&bodyType=humanoid", "_blank", "width=1280,height=800,scrollbars=yes,toolbar=no");
+            alert("✅ Se abrió el creador 3D. Diseña tu personaje, guarda el diseño y copia el enlace de la imagen/avatar");
         }
 
-        // Espacio exclusivo por usuario
-        function obtenerEspacioUsuario() { return `avatares_${localStorage.getItem('nexus_nick')}`; }
-        
-        function usarAvatarPredeterminado() {
-            const clave = obtenerEspacioUsuario();
-            let avatares = JSON.parse(localStorage.getItem(clave) || '[]');
-            if(avatares.length >= MAX_AVATARES) return alert(`⚠️ Límite: ${MAX_AVATARES} avatares`);
-            const predet = AVATARES_LISTOS[avatares.length];
-            avatares.push({id:Date.now(), nombre:predet.nombre, icono:predet.icono, url:'', activo:avatares.length===0});
-            localStorage.setItem(clave, JSON.stringify(avatares));
-            alert("✅ Avatar listo agregado!");
-            mostrarPerfil();
-        }
-
-        function guardarAvatarEspacio() {
-            const clave = obtenerEspacioUsuario();
-            let avatares = JSON.parse(localStorage.getItem(clave) || '[]');
-            if(avatares.length >= MAX_AVATARES) return alert(`⚠️ Límite: ${MAX_AVATARES} avatares`);
-            const enlace = document.getElementById('enlaceAvatar').value.trim() || '';
-            avatares.push({id:Date.now(), nombre:`Avatar ${avatares.length+1}`, url:enlace, icono:'👤', activo:avatares.length===0});
-            localStorage.setItem(clave, JSON.stringify(avatares));
-            alert("✅ Avatar guardado en tu espacio!");
+        function guardarMiAvatar() {
+            const enlace = document.getElementById('enlaceAvatar3D').value.trim();
+            if(!enlace) return alert("Primero abre el creador, diseña tu avatar y pega el enlace aquí");
+            
+            localStorage.setItem('nexus_avatar', enlace);
+            alert("✅ Tu avatar 3D se guardó correctamente!");
             mostrarPerfil();
         }
 
         function abrirCreadorDesdePerfil() {
-            const avatares = JSON.parse(localStorage.getItem(obtenerEspacioUsuario()) || '[]');
-            if(avatares.length >= MAX_AVATARES) return alert("⚠️ Límite alcanzado");
             ocultarTodasCajas();
-            document.getElementById('cajaCreadorAvatar').style.display = 'flex';
+            document.getElementById('cajaCreador').style.display = 'flex';
+            document.getElementById('enlaceAvatar3D').value = '';
+            document.getElementById('textoPreview').style.display = 'none';
+            document.getElementById('vistaAvatar').innerHTML = '👤';
         }
 
-        function cargarEspacioAvatares() {
-            const avatares = JSON.parse(localStorage.getItem(obtenerEspacioUsuario()) || '[]');
-            document.getElementById('contadorAvatares').textContent = `📦 Tus avatares: ${avatares.length}/${MAX_AVATARES}`;
-            const lista = document.getElementById('listaAvatares'); lista.innerHTML = '';
-            if(avatares.length ===0) { lista.innerHTML = `<p style="color:#aaffaa; grid-column:1/-1;">Aún no tienes avatares</p>`; return; }
-            avatares.forEach(a => {
-                const tarjeta = document.createElement('div');
-                tarjeta.className = `tarjeta-avatar ${a.activo?'activo':''}`;
-                tarjeta.innerHTML = `
-                    <div class="avatar-img">${a.url?`<img src="${a.url}" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='${a.icono||'👤'}'">`:(a.icono||'👤')}</div>
-                    <div class="nombre-avatar">${a.nombre} ${a.activo?'⭐':''}</div>
-                    <button class="btn-verde" style="font-size:0.8rem; padding:5px;" onclick="usarEste(${a.id})">Usar</button>
-                    ${!a.activo?`<button class="btn-rojo" onclick="eliminarEste(${a.id})">Eliminar</button>`:''}
-                `;
-                lista.appendChild(tarjeta);
-            });
+        function mostrarPerfil() {
+            ocultarTodasCajas();
+            const usuario = localStorage.getItem('nexus_nick');
+            const avatar = localStorage.getItem('nexus_avatar') || '';
+            document.getElementById('nombrePerfil').textContent = usuario;
+            const vista = document.getElementById('avatarPerfil');
+            vista.innerHTML = avatar ? `<img src="${avatar}" alt="Tu avatar 3D" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">` : '👤';
+            document.getElementById('cajaPerfil').style.display = 'flex';
         }
 
-        function usarEste(id) {
-            const clave = obtenerEspacioUsuario();
-            let avatares = JSON.parse(localStorage.getItem(clave));
-            avatares.forEach(a=>a.activo = (a.id===id));
-            localStorage.setItem(clave, JSON.stringify(avatares)); cargarEspacioAvatares();
+        function cerrarSesion() {
+            if(confirm("¿Seguro quieres salir? Tu avatar se guarda en tu cuenta")) {
+                localStorage.removeItem('nexus_tipo');
+                volverInicio();
+            }
         }
-        function eliminarEste(id) {
-            if(!confirm("¿Eliminar este avatar? No se recupera")) return;
-            const clave = obtenerEspacioUsuario();
-            let avatares = JSON.parse(localStorage.getItem(clave)).filter(a=>a.id!==id);
-            localStorage.setItem(clave, JSON.stringify(avatares)); cargarEspacioAvatares();
-        }
-        function mostrarPerfil() { ocultarTodasCajas(); document.getElementById('nombrePerfil').textContent = localStorage.getItem('nexus_nick'); cargarEspacioAvatares(); document.getElementById('cajaPerfil').style.display = 'flex'; }
-        function cerrarSesion() { if(confirm("¿Salir? Tus avatares se guardan")) { localStorage.removeItem('nexus_tipo'); volverInicio(); } }
         function irSalaSaberes() { window.location.href = "sala.html"; }
+
+        // Mostrar vista previa al pegar el enlace
+        document.getElementById('enlaceAvatar3D').addEventListener('input', function(){
+            const enlace = this.value.trim();
+            if(enlace) {
+                document.getElementById('textoPreview').style.display = 'block';
+                document.getElementById('vistaAvatar').innerHTML = `<img src="${enlace}" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='⚠️ Enlace no válido'">`;
+            } else {
+                document.getElementById('textoPreview').style.display = 'none';
+                document.getElementById('vistaAvatar').innerHTML = '👤';
+            }
+        });
     </script>
 </body>
 </html>
