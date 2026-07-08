@@ -29,18 +29,13 @@
         }
         .boton-entrar:hover { transform: scale(1.07); box-shadow: 0 0 35px rgba(255,215,0,0.8); }
 
-        .boton-invitado {
-            padding: 13px 45px; font-size: 1.15rem; color: #fff;
-            background: rgba(60,80,180,0.8); border: 2px solid #8899ff; border-radius: 50px;
-            cursor: pointer; transition: 0.3s;
+        .boton-invitado, .boton-miembro {
+            padding: 13px 45px; font-size: 1.15rem; border-radius: 50px; border: none;
+            cursor: pointer; transition: 0.3s; margin: 5px 0;
         }
+        .boton-invitado { background: rgba(60,80,180,0.8); color:#fff; border:2px solid #8899ff; }
         .boton-invitado:hover { background: rgba(80,100,200,0.9); transform: scale(1.03); }
-
-        .boton-miembro {
-            padding: 13px 45px; font-size: 1.15rem; color: #0a0a2a;
-            background: linear-gradient(135deg, #ffd700, #ffaa00); border: 2px solid #ffcc00; border-radius: 50px;
-            cursor: pointer; transition: 0.3s;
-        }
+        .boton-miembro { background: linear-gradient(135deg, #ffd700, #ffaa00); color:#0a0a2a; font-weight:600; }
         .boton-miembro:hover { transform: scale(1.03); box-shadow: 0 0 20px rgba(255,215,0,0.7); }
 
         .caja {
@@ -69,7 +64,7 @@
         .btn-morado:hover { background: #aa66ee; }
         .btn-naranja { background: #ff8822; color: white; }
         .btn-naranja:hover { background: #ff9944; }
-        .btn-rojo { background: #cc3333; color: white; font-size:0.9rem; padding:8px; }
+        .btn-rojo { background: #cc3333; color: white; font-size:0.9rem; padding:8px; border-radius:8px; }
         .btn-rojo:hover { background: #ee4444; }
 
         .texto-cambio { color: #aaccff; text-align: center; font-size: 0.9rem; margin-top:8px; }
@@ -82,7 +77,14 @@
         }
         .boton-atras:hover { background: #666; }
 
-        /* Gestión de Avatares */
+        /* Creador y espacio individual */
+        .caja-avatar { max-width: 95%; max-height: 92vh; }
+        .marco-avatar {
+            width: 100%; height: 420px; border: 2px solid #ffd700; border-radius: 12px;
+            background: #000; margin: 10px 0;
+        }
+        .aviso { color: #aaffaa; text-align: center; font-size: 0.9rem; line-height:1.5; }
+        .espacio-usuario { color:#ffd700; text-align:center; font-weight:bold; margin-bottom:10px; }
         .contador-avatares { color: #ffd700; text-align:center; font-weight:bold; margin:5px 0; }
         .lista-avatares {
             display: grid; grid-template-columns: repeat(2, 1fr); gap:10px; margin:10px 0;
@@ -90,18 +92,18 @@
         }
         .tarjeta-avatar {
             background: rgba(30,20,60,0.8); border:2px solid #556; border-radius:10px;
-            padding:12px; text-align:center; cursor:pointer; transition:0.3s;
+            padding:12px; text-align:center; transition:0.3s;
         }
         .tarjeta-avatar.activo { border-color:#ffd700; box-shadow:0 0 10px rgba(255,215,0,0.5); }
         .tarjeta-avatar:hover { border-color:#8899ff; }
-        .icono-avatar { font-size:2.5rem; margin-bottom:5px; }
-        .nombre-avatar { color:#fff; font-size:0.9rem; margin-bottom:8px; }
-        .aviso-perfil { color: #88ccff; font-size:0.9rem; text-align:center; margin-bottom:10px; }
+        .avatar-img { width:70px; height:70px; border-radius:50%; margin:0 auto 5px; object-fit:cover; border:2px solid #ffd700; background:#335; display:flex; align-items:center; justify-content:center; font-size:2rem; color:#ffd700; }
+        .nombre-avatar { color:#fff; font-size:0.9rem; margin-bottom:5px; }
 
         @media (max-width: 480px) {
             .titulo { font-size: 2rem; }
             .caja { padding: 20px 15px; }
             .lista-avatares { grid-template-columns: 1fr; }
+            .marco-avatar { height: 360px; }
         }
     </style>
 </head>
@@ -116,10 +118,10 @@
         <div class="caja" id="cajaOpciones">
             <h2>Elige tu forma de acceso</h2>
             <button class="boton-invitado" onclick="accesoInvitado()">🚪 Entrar como Invitado</button>
-            <p class="texto-cambio">Explora rápido, sin registros</p>
+            <p class="texto-cambio">Explora rápido, sin espacio individual</p>
             <button class="boton-miembro" onclick="mostrarInicioSesion()">👤 Soy Miembro</button>
             <button class="boton-miembro" onclick="mostrarRegistro()">✨ Crear cuenta de Miembro</button>
-            <p class="texto-cambio">Hasta 10 avatares en tu perfil</p>
+            <p class="texto-cambio">Tu espacio propio: diseña y guarda hasta 10 avatares</p>
             <button class="boton-atras" onclick="volverInicio()">← Volver</button>
         </div>
 
@@ -142,18 +144,36 @@
             <input type="text" id="regUsuario" class="entrada" placeholder="Tu nombre público" maxlength="15" required>
             <label class="etiqueta">Contraseña *</label>
             <input type="password" id="regPass" class="entrada" placeholder="Mínimo 6 caracteres" required>
-            <p class="aviso-perfil">* Podrás agregar más datos después en tu perfil</p>
-            <button class="boton-principal btn-verde" onclick="guardarRegistro()">Crear Cuenta → Continuar</button>
+            <p class="aviso">* Cada usuario tiene su espacio exclusivo para avatares</p>
+            <button class="boton-principal btn-verde" onclick="guardarRegistro()">Continuar → Crear tu primer Avatar</button>
             <p class="texto-cambio">¿Ya tienes cuenta? <span class="enlace" onclick="mostrarInicioSesion()">Inicia sesión</span></p>
             <button class="boton-atras" onclick="volverOpciones()">← Atrás</button>
         </div>
 
-        <!-- Perfil y Avatares -->
+        <!-- Creador integrado -->
+        <div class="caja caja-avatar" id="cajaCreadorAvatar">
+            <h2>🎨 Creador de Avatar - Ready Player Me</h2>
+            <p class="aviso">Diseña tu personaje aquí. Cuando termines, copia el enlace de tu avatar y pégalo abajo, o solo presiona continuar.</p>
+            <iframe 
+                src="https://vr.readyplayer.me/avatar?lang=es&frameApi"
+                class="marco-avatar"
+                allow="camera; microphone; xr-spatial-tracking; *"
+                sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox"
+                loading="lazy"
+            ></iframe>
+            <input type="text" id="enlaceAvatar" class="entrada" placeholder="Pega aquí el enlace de tu avatar (opcional)" style="margin-top:10px;">
+            <button class="boton-principal btn-verde" onclick="guardarAvatarEspacio()">✅ Guardar en mi espacio</button>
+            <button class="boton-atras" onclick="volverPerfil()">← Volver al perfil</button>
+        </div>
+
+        <!-- Perfil y tu espacio exclusivo -->
         <div class="caja" id="cajaPerfil">
-            <div class="perfil-nombre" id="nombrePerfil"></div>
-            <p class="aviso-perfil">📌 Puedes elegir entre estos estilos o agregar tus propios diseños más adelante</p>
+            <div class="espacio-usuario">🔐 Tu espacio exclusivo de Miembro</div>
+            <div class="perfil-nombre" id="nombrePerfil" style="text-align:center; color:#ffd700; font-size:1.7rem; font-weight:bold;"></div>
+            <p class="aviso">Todos tus avatares se guardan solo en tu cuenta, nadie más los ve</p>
             <div class="contador-avatares" id="contadorAvatares"></div>
             <div class="lista-avatares" id="listaAvatares"></div>
+            <button class="boton-principal btn-morado" onclick="abrirCreadorDesdePerfil()">➕ Crear nuevo Avatar</button>
             <button class="boton-principal btn-naranja" onclick="irSalaSaberes()">📚 Ir a la Sala de Saberes</button>
             <button class="boton-atras" onclick="cerrarSesion()">Cerrar Sesión</button>
         </div>
@@ -162,38 +182,20 @@
 
     <script>
         const MAX_AVATARES = 10;
-        // Avatares predefinidos sin enlaces externos
-        const AVATARES_BASE = [
-            {id:1, nombre:"Explorador", icono:"🗺️"},
-            {id:2, nombre:"Sabio", icono:"📜"},
-            {id:3, nombre:"Guerrero", icono:"⚔️"},
-            {id:4, nombre:"Místico", icono:"✨"},
-            {id:5, nombre:"Investigador", icono:"🔍"},
-            {id:6, nombre:"Arquitecto", icono:"🏛️"},
-            {id:7, nombre:"Observador", icono:"👁️"},
-            {id:8, nombre:"Viajero", icono:"🌍"},
-            {id:9, nombre:"Guardían", icono:"🛡️"},
-            {id:10, nombre:"Creador", icono:"🎨"}
-        ];
 
+        // --- Navegación básica ---
         function mostrarOpciones() {
             document.getElementById('btnInicio').style.display = 'none';
             document.getElementById('cajaOpciones').style.display = 'flex';
         }
-
         function ocultarTodasCajas() {
             document.querySelectorAll('.caja').forEach(caja => caja.style.display = 'none');
         }
-        function volverInicio() {
-            ocultarTodasCajas();
-            document.getElementById('btnInicio').style.display = 'block';
-        }
-        function volverOpciones() {
-            ocultarTodasCajas();
-            document.getElementById('cajaOpciones').style.display = 'flex';
-        }
+        function volverInicio() { ocultarTodasCajas(); document.getElementById('btnInicio').style.display = 'block'; }
+        function volverOpciones() { ocultarTodasCajas(); document.getElementById('cajaOpciones').style.display = 'flex'; }
+        function volverPerfil() { ocultarTodasCajas(); document.getElementById('cajaPerfil').style.display = 'flex'; }
 
-        // Acceso Invitado
+        // --- Acceso Invitado ---
         function accesoInvitado() {
             const nombreTemp = "Invitado_" + Math.floor(Math.random()*9999);
             alert(`👋 Bienvenido ${nombreTemp}! Entrando a la Sala...`);
@@ -202,13 +204,13 @@
             window.location.href = "sala.html";
         }
 
+        // --- Registro y acceso ---
         function mostrarInicioSesion() { ocultarTodasCajas(); document.getElementById('cajaLogin').style.display = 'flex'; }
         function mostrarRegistro() { ocultarTodasCajas(); document.getElementById('cajaRegistro').style.display = 'flex'; }
 
         function guardarRegistro() {
             const usuario = document.getElementById('regUsuario').value.trim();
             const pass = document.getElementById('regPass').value.trim();
-
             if(usuario.length <2) return alert("El usuario debe tener al menos 2 caracteres");
             if(pass.length <6) return alert("La contraseña debe tener al menos 6 caracteres");
 
@@ -217,14 +219,14 @@
             localStorage.setItem('nexus_pass', pass);
             localStorage.setItem('nexus_correo', 'Sin especificar');
             localStorage.setItem('nexus_nacion', 'Sin especificar');
-            
-            // Asignamos avatares base sin errores
-            localStorage.setItem('nexus_lista_avatares', JSON.stringify([
-                {...AVATARES_BASE[0], activo:true}
-            ]));
 
-            alert("✅ Cuenta creada correctamente!");
-            mostrarPerfil();
+            // Espacio exclusivo: avatares guardados bajo tu usuario único
+            const claveEspacio = `avatares_${usuario}`;
+            localStorage.setItem(claveEspacio, JSON.stringify([]));
+
+            alert("✅ Cuenta creada! Tienes tu propio espacio para guardar avatares");
+            ocultarTodasCajas();
+            document.getElementById('cajaCreadorAvatar').style.display = 'flex';
         }
 
         function verificarLogin() {
@@ -234,55 +236,98 @@
             const p = localStorage.getItem('nexus_pass');
 
             if(ingreso === u && passIngreso === p) {
-                alert("✅ Bienvenido de nuevo " + u);
+                alert("✅ Bienvenido de nuevo " + u + "! Entrando a tu espacio...");
                 mostrarPerfil();
-            } else alert("❌ Usuario o contraseña incorrectos");
+            } else alert("❌ Usuario o contraseña incorrectos, o no existe tu cuenta");
         }
 
-        // Gestión de Avatares
-        function cargarListaAvatares() {
-            const avatares = JSON.parse(localStorage.getItem('nexus_lista_avatares') || '[]');
-            document.getElementById('contadorAvatares').textContent = `📦 Avatares disponibles: ${avatares.length}/${MAX_AVATARES}`;
+        // --- Gestión de avatares EN TU ESPACIO EXCLUSIVO ---
+        function obtenerEspacioUsuario() {
+            const usuario = localStorage.getItem('nexus_nick');
+            return `avatares_${usuario}`;
+        }
+
+        function guardarAvatarEspacio() {
+            const clave = obtenerEspacioUsuario();
+            let avatares = JSON.parse(localStorage.getItem(clave) || '[]');
+            if(avatares.length >= MAX_AVATARES) return alert(`⚠️ Límite de ${MAX_AVATARES} avatares en tu espacio. Elimina uno antes.`);
+
+            const enlace = document.getElementById('enlaceAvatar').value.trim() || '';
+            const nuevo = {
+                id: Date.now(),
+                nombre: `Avatar ${avatares.length+1}`,
+                url: enlace,
+                activo: avatares.length === 0
+            };
+            avatares.push(nuevo);
+            localStorage.setItem(clave, JSON.stringify(avatares));
+            alert("✅ Avatar guardado en tu espacio exclusivo!");
+            mostrarPerfil();
+        }
+
+        function abrirCreadorDesdePerfil() {
+            const clave = obtenerEspacioUsuario();
+            const avatares = JSON.parse(localStorage.getItem(clave) || '[]');
+            if(avatares.length >= MAX_AVATARES) return alert(`⚠️ Límite alcanzado en tu espacio: ${MAX_AVATARES} avatares`);
+            ocultarTodasCajas();
+            document.getElementById('cajaCreadorAvatar').style.display = 'flex';
+        }
+
+        function cargarEspacioAvatares() {
+            const clave = obtenerEspacioUsuario();
+            const avatares = JSON.parse(localStorage.getItem(clave) || '[]');
+            document.getElementById('contadorAvatares').textContent = `📦 Tus avatares: ${avatares.length}/${MAX_AVATARES}`;
             const lista = document.getElementById('listaAvatares');
             lista.innerHTML = '';
-            
-            // Agregamos avatares base que no tenga aún
-            AVATARES_BASE.forEach(base => {
-                if(!avatares.find(a => a.id === base.id) && avatares.length < MAX_AVATARES) {
-                    avatares.push({...base, activo:false});
-                }
-            });
-            localStorage.setItem('nexus_lista_avatares', JSON.stringify(avatares));
+
+            if(avatares.length === 0) {
+                lista.innerHTML = `<p style="color:#aaffaa; grid-column:1/-1;">Aún no tienes avatares. Crea el primero aquí!</p>`;
+                return;
+            }
 
             avatares.forEach(a => {
                 const tarjeta = document.createElement('div');
                 tarjeta.className = `tarjeta-avatar ${a.activo ? 'activo' : ''}`;
                 tarjeta.innerHTML = `
-                    <div class="icono-avatar">${a.icono}</div>
+                    <div class="avatar-img">${a.url ? `<img src="${a.url}" alt="Avatar" style="width:100%; height:100%; object-fit:cover;">` : '👤'}</div>
                     <div class="nombre-avatar">${a.nombre} ${a.activo ? '⭐ ACTIVO' : ''}</div>
-                    <button class="boton-principal btn-verde" style="font-size:0.8rem; padding:5px;" onclick="seleccionarAvatar(${a.id})">Usar este</button>
+                    <button class="boton-principal btn-verde" style="font-size:0.8rem; padding:5px; margin:5px 0;" onclick="usarEsteAvatar(${a.id})">Usar este</button>
+                    ${!a.activo ? `<button class="btn-rojo" onclick="eliminarDeMiEspacio(${a.id})">Eliminar</button>` : ''}
                 `;
                 lista.appendChild(tarjeta);
             });
         }
 
-        function seleccionarAvatar(id) {
-            let avatares = JSON.parse(localStorage.getItem('nexus_lista_avatares'));
+        function usarEsteAvatar(id) {
+            const clave = obtenerEspacioUsuario();
+            let avatares = JSON.parse(localStorage.getItem(clave));
             avatares.forEach(a => a.activo = (a.id === id));
-            localStorage.setItem('nexus_lista_avatares', JSON.stringify(avatares));
-            cargarListaAvatares();
-            alert("✅ Avatar cambiado correctamente!");
+            localStorage.setItem(clave, JSON.stringify(avatares));
+            cargarEspacioAvatares();
+            alert("✅ Cambiado al avatar seleccionado");
+        }
+
+        function eliminarDeMiEspacio(id) {
+            if(!confirm("¿Eliminar este avatar de TU espacio? No se recupera.")) return;
+            const clave = obtenerEspacioUsuario();
+            let avatares = JSON.parse(localStorage.getItem(clave));
+            avatares = avatares.filter(a => a.id !== id);
+            localStorage.setItem(clave, JSON.stringify(avatares));
+            cargarEspacioAvatares();
         }
 
         function mostrarPerfil() {
             ocultarTodasCajas();
             document.getElementById('nombrePerfil').textContent = localStorage.getItem('nexus_nick');
-            cargarListaAvatares();
+            cargarEspacioAvatares();
             document.getElementById('cajaPerfil').style.display = 'flex';
         }
 
         function cerrarSesion() {
-            if(confirm("¿Seguro que quieres cerrar sesión?")) { localStorage.clear(); volverInicio(); }
+            if(confirm("¿Seguro quieres salir? Tus avatares se quedan guardados en tu cuenta.")) {
+                localStorage.removeItem('nexus_tipo');
+                volverInicio();
+            }
         }
         function irSalaSaberes() { window.location.href = "sala.html"; }
     </script>
